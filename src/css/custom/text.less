@@ -1,0 +1,189 @@
+@import "../theme/theme.less";
+
+//************************** 文本  *****************************************/
+//字体大小
+.vc-text {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.vc-text--no {
+  font-size: 0;
+}
+
+.vc-text--mi,
+h6 {
+  font-size: 10px;
+}
+
+.vc-text--sm,
+h5 {
+  font-size: 12px;
+}
+
+.vc-text--md,
+h4 {
+  font-size: 14px;
+}
+
+.vc-text--lg,
+h3 {
+  font-size: 16px;
+}
+
+.vc-text--xl,
+h2 {
+  font-size: 18px;
+}
+
+.vc-text--xl-x,
+h1 {
+  font-size: 20px;
+}
+
+.vc-text--xl-xx {
+  font-size: 24px;
+}
+
+.vc-text--xl-xxx {
+  font-size: 30px;
+}
+
+.vc-text--xl-xxxx {
+  font-size: 40px;
+}
+
+//字体颜色
+
+.vc-text--theme {
+  color: @color-theme;
+}
+.vc-text--warning {
+  color: @color-warning;
+}
+
+.vc-text--danger {
+  color: @color-danger;
+}
+.vc-text--success {
+  color: @color-success;
+}
+.vc-text--info {
+  color: @color-info;
+}
+.vc-text--dark {
+  color: @color-dark;
+}
+.vc-text--light {
+  color: @color-light;
+}
+.vc-text--gray {
+  color: @color-gray;
+}
+.vc-text--white {
+  color: @color-white;
+}
+.vc-text--black {
+  color: #000;
+}
+.vc-text--white-light {
+  color: fade(@color-white, 50);
+}
+// 居中对齐方式
+.vc-text--center {
+  text-align: center;
+}
+.vc-text--left {
+  text-align: left;
+}
+.vc-text--right {
+  text-align: right;
+}
+// 加粗
+.vc-text--bold,
+strong {
+  font-weight: 800;
+}
+//倾斜
+.vc-text--italic,
+i {
+  font-style: italic;
+}
+
+//文本缩进
+.vc-text--indent {
+  text-indent: 5px;
+}
+
+//文本换行方式
+
+.vc-text--nowrap {
+  white-space: nowrap;
+}
+
+// 不换行
+.vc-text--wrap {
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+// 自动换行
+.vc-text--break {
+  word-break: break-all;
+}
+
+// 强制换行
+//行高
+.vc-text--baseline--mi {
+  line-height: 1;
+}
+
+// 1 1.2 1.5 1.8 2 2.5
+.vc-text--baseline--sm {
+  line-height: 1.2;
+}
+
+.vc-text--baseline,
+.vc-text--baseline--md {
+  line-height: 1.5;
+}
+
+.vc-text--baseline--pl {
+  line-height: 1.8;
+}
+
+.vc-text--baseline--lg {
+  line-height: 2;
+}
+
+.vc-text--baseline--xl {
+  line-height: 2.5;
+}
+
+// 改变大小写
+.vc-text--lowercase {
+  text-transform: lowercase;
+}
+
+.vc-text--uppercase {
+  text-transform: uppercase;
+}
+
+.vc-text--capitalize {
+  text-transform: capitalize;
+}
+
+//可见行
+.vc-text--ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 不能是flex：1布局下使用 , 得用block，inline-block来包裹
+.vc-text--clamp {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}

@@ -1,0 +1,1 @@
+yarn add sockjs-client stompjs  store-es store-vue-directive vue-clipboards vue-qriously store-vue-ui vant

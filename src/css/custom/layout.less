@@ -1,0 +1,144 @@
+
+//************************************************************************ 清除浮动  ****************************************************************************************/
+.vc-clear:after   { display:block;clear:both;content:"";visibility:hidden;height:0}
+.vc-clear:before  { display:block;clear:both;content:"";visibility:hidden;height:0}
+
+//************************************************************************ 布局方式  ****************************************************************************************/
+.vc-box,
+.vc-box--flex   { display: flex ; }
+.vc-box--inline { display: inline ; }
+.vc-box--inline-block{ display: inline-block ; font-size: 0 ; vertical-align: middle;  }  // 处理 icon 和文字不能在一条线上
+.vc-box--block  { display: block ; }
+.vc-box--table  { display: table ; }
+.vc-box--table-row { display: table-row ; }
+.vc-box--table-cell { display: table-cell ; }
+
+
+//********* 栅格化 **********/
+.vc-row::before {     display: table;  content: " "  ;  clear: both;}
+.vc-row::after {     display: table;  content: " "  ;  clear: both;}
+.vc-row[data-gutter='10']{ margin-left: -5px;margin-right: -5px;}
+.vc-row[data-gutter='10'] [class^=vc-col-]{ padding-left: 5px;padding-right: 5px;}
+.vc-row[data-gutter='20']{ margin-left: -10px;margin-right: -10px;}
+.vc-row[data-gutter='20'] [class^=vc-col-]{ padding-left: 10px;padding-right: 10px;}
+[class *= vc-col--]{
+  float: left ;position: relative;  min-height: 1px ;
+}
+
+.vc-col--01{  width: 1 / 24 * 100%  }
+.vc-col--02{  width: 2 / 24 * 100%  }
+.vc-col--03{  width: 3 / 24 * 100%  }
+.vc-col--04{  width: 4 / 24 * 100%  }
+.vc-col--05{  width: 5 / 24 * 100%  }
+.vc-col--06{  width: 6 / 24 * 100%  }
+.vc-col--07{  width: 7 / 24 * 100%  }
+.vc-col--08{  width: 8 / 24 * 100%  }
+.vc-col--09{  width: 9 / 24 * 100%  }
+.vc-col--10{  width: 10 / 24 * 100%  }
+.vc-col--11{  width: 11 / 24 * 100%  }
+.vc-col--12{  width: 12 / 24 * 100%  }
+.vc-col--13{  width: 13 / 24 * 100%  }
+.vc-col--14{  width: 14 / 24 * 100%  }
+.vc-col--15{  width: 15 / 24 * 100%  }
+.vc-col--16{  width: 16 / 24 * 100%  }
+.vc-col--17{  width: 17 / 24 * 100%  }
+.vc-col--18{  width: 18 / 24 * 100%  }
+.vc-col--19{  width: 19 / 24 * 100%  }
+.vc-col--20{  width: 20 / 24 * 100%  }
+.vc-col--21{  width: 21 / 24 * 100%  }
+.vc-col--22{  width: 22 / 24 * 100%  }
+.vc-col--23{  width: 23 / 24 * 100%  }
+.vc-col--24{  width: 24 / 24 * 100%  }
+
+.vc-col--offset-01{  margin-left: 1 / 24 * 100%  }
+.vc-col--offset-02{  margin-left: 2 / 24 * 100%  }
+.vc-col--offset-03{  margin-left: 3 / 24 * 100%  }
+.vc-col--offset-04{  margin-left: 4 / 24 * 100%  }
+.vc-col--offset-05{  margin-left: 5 / 24 * 100%  }
+.vc-col--offset-06{  margin-left: 6 / 24 * 100%  }
+.vc-col--offset-07{  margin-left: 7 / 24 * 100%  }
+.vc-col--offset-08{  margin-left: 8 / 24 * 100%  }
+.vc-col--offset-09{  margin-left: 9 / 24 * 100%  }
+.vc-col--offset-10{  margin-left: 10 / 24 * 100%  }
+.vc-col--offset-11{  margin-left: 11 / 24 * 100%  }
+.vc-col--offset-12{  margin-left: 12 / 24 * 100%  }
+.vc-col--offset-13{  margin-left: 13 / 24 * 100%  }
+.vc-col--offset-14{  margin-left: 14 / 24 * 100%  }
+.vc-col--offset-15{  margin-left: 15 / 24 * 100%  }
+.vc-col--offset-16{  margin-left: 16 / 24 * 100%  }
+.vc-col--offset-17{  margin-left: 17 / 24 * 100%  }
+.vc-col--offset-18{  margin-left: 18 / 24 * 100%  }
+.vc-col--offset-19{  margin-left: 19 / 24 * 100%  }
+.vc-col--offset-20{  margin-left: 20 / 24 * 100%  }
+.vc-col--offset-21{  margin-left: 21 / 24 * 100%  }
+.vc-col--offset-22{  margin-left: 22 / 24 * 100%  }
+.vc-col--offset-23{  margin-left: 23 / 24 * 100%  }
+.vc-col--offset-24{  margin-left: 24 / 24 * 100%  }
+
+//********* flex **********/
+.vc-flex { display: flex }
+.vc-flex--fit{  flex:1  }
+.vc-flex--fix{  flex: 0  }
+.vc-flex--aut{  flex: auto ;width: auto; }
+
+// 常用 垂直水平居中
+.vc-flex--center{display: flex; justify-content: center; align-items: center }
+.vc-flex--between-center{display: flex; justify-content: space-between; align-items: center }
+// justify-content属性定义了项目在主轴上的对齐方式。
+.vc-content--center{  justify-content: center;  }
+.vc-content--start{  justify-content: flex-start;  }
+.vc-content--end{  justify-content: flex-end;  }
+.vc-content--around{  justify-content: space-around;  }
+.vc-content--between{  justify-content: space-between;  }
+// align-items属性定义项目在交叉轴上如何对齐
+.vc-items--center{  align-items: center }
+.vc-items--start{  align-items: flex-start }
+.vc-items--end{  align-items: flex-end }
+.vc-items--baseline {  align-items: baseline  }
+.vc-items--stretch{  align-items: stretch }
+//align-content属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。
+.vc-align-content--center{ align-content: center}
+.vc-align-content--start{ align-content: flex-start }
+.vc-align-content--end{ align-content: flex-end }
+.vc-align-content--around{ align-content: space-around}
+.vc-align-content--between{ align-content: space-between}
+.vc-align-content--stretch{ align-content: stretch}
+//默认情况下，项目都排在一条线（又称”轴线”）上。flex-wrap属性定义，如果一条轴线排不下，如何换行
+.vc-wrap--nowrap{ flex-wrap: nowrap }
+.vc-wrap--wrap{ flex-wrap: wrap }
+.vc-wrap--wrap-reverse{ flex-wrap: wrap-reverse }
+//flex-direction属性决定主轴的方向（即项目的排列方向）
+.vc-direction--row{flex-direction: row}
+.vc-direction--row-reverse{flex-direction: row-reverse}
+.vc-direction--column{flex-direction: column}
+.vc-direction--column-reverse{flex-direction: column-reverse}
+
+
+//************************************************************************ overflow  ****************************************************************************************/
+.vc-flow,
+.vc-flow--ao { overflow: auto ; }
+.vc-flow--hn  { overflow: hidden };
+
+//************************************************************************ 页面全屏布局  ****************************************************************************************/
+.vc-cover   { width: 100%;height:100% ; }
+.vc-cover--w   { width: 100% ; }
+.vc-cover--h   { height: 100% ; }
+.vc-cover--h-min  { min-height: 100% ; }
+.vc-cover--h-max  { max-height: 100% ; }
+
+.vc-fluid { width: 100vw;height:100vh; }
+.vc-fluid--w { width: 100vw; }
+.vc-fluid--h { height:100vh; }
+.vc-fluid--h-min { min-height:100vh; }
+.vc-fluid--h-max { max-height: 100vh; }
+
+
+//************************************************************************ 相对位置  ***************************************************/
+.vc-pos,
+.vc-pos--re { position: relative }
+.vc-pos--fd { position: fixed; }
+.vc-pos--ae { position: absolute; }
+.vc-pos--lt   {  left:0;top: 0 }
+.vc-pos--rt   {  right:0;top: 0 }
+.vc-pos--lb   {  left:0;bottom: 0 }
+.vc-pos--rb   {  right:0;bottom: 0 }

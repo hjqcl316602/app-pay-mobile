@@ -1,0 +1,51 @@
+
+
+@import '../theme/theme.less';
+
+//************************************************************************ border 手机端 *****************************************/
+.vc-border--dashed,
+.vc-border--ud,
+.vc-border--bm,
+.vc-border--lt,
+.vc-border--rt,
+.vc-border--tp,
+.vc-border{  position: relative; }
+[class*=vc-border]:after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 400%;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.vc-border:after{  border: 1px solid @color-line;  }
+.vc-border--bm:after{  border-bottom:1px solid @color-line;  }
+.vc-border--tp:after{  border-top:1px solid @color-line;  }
+.vc-border--lt:after{  border-left:1px solid @color-line;  }
+.vc-border--rt:after{  border-right:1px solid @color-line;  }
+.vc-border--ud:after{  border-bottom:1px solid @color-line; border-top:1px solid @color-line; }
+.vc-border--dashed:after{  border-style: dashed;  }
+
+
+
+/* 电脑端
+.my-border{  border: 1px solid @color-border;  }
+.my-border--none{  border: none;  }
+.my-border__top{  border-top: 1px solid @color-border;  }
+.my-border__top--none{  border-top: none;  }
+.my-border__bottom{  border-bottom: 1px solid @color-border;  }
+.my-border__bottom--none{  border-bottom:none;  }
+.my-border__left{  border-left: 1px solid @color-border;  }
+.my-border__left--none{  border-left: none;  }
+.my-border__right{  border-right: 1px solid @color-border;  }
+.my-border__right--none{  border-right: none;  }*/
+
+
+

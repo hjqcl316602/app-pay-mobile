@@ -1,0 +1,137 @@
+
+@import "../theme/theme.less";
+
+/********************************************** 弹出框动画 *********************************************/
+
+.vt-popup-slide-top-enter,.vt-popup-slide-top-leave-active{-webkit-transform:translate3d(-50%,-100%,0);transform:translate3d(-50%,-100%,0)}
+.vt-popup-slide-right-enter,.vt-popup-slide-right-leave-active{-webkit-transform:translate3d(100%,-50%,0);transform:translate3d(100%,-50%,0)}
+.vt-popup-slide-bottom-enter,.vt-popup-slide-bottom-leave-active{-webkit-transform:translate3d(-50%,100%,0);transform:translate3d(-50%,100%,0)}
+.vt-popup-slide-left-enter,.vt-popup-slide-left-leave-active{-webkit-transform:translate3d(-100%,-50%,0);transform:translate3d(-100%,-50%,0)}
+
+/********************************************** 划入划出 *********************************************/
+.vt-slide-bottom {
+    &-enter-active {  animation: vt-slide-bottom-enter .5s both ease;  }
+    &-leave-active {  animation: vt-slide-bottom-leave .5s both ease;  }
+}
+@keyframes vt-slide-bottom-enter {
+    from {  transform: translate3d(0, 100%, 0);  }
+}
+@keyframes vt-slide-bottom-leave {
+    to {  transform: translate3d(0, 100%, 0);  }
+}
+
+
+.vt-slide-left {
+    &-enter-active {  animation: vt-slide-left-enter .5s both ease;  }
+    &-leave-active {  animation: vt-slide-left-leave .5s both ease;  }
+}
+@keyframes vt-slide-left-enter {
+    from {  transform: translate3d(100%, 0, 0);   }
+}
+@keyframes vt-slide-left-leave {
+    to {  transform: translate3d(-100%, 0, 0);  }
+}
+
+.vt-slide-right {
+    &-enter-active {  animation: vt-slide-right-enter .5s both ease;  }
+    &-leave-active {  animation: vt-slide-right-leave .5s both ease;  }
+}
+@keyframes vt-slide-right-enter {
+    from {  transform: translate3d(-100%, 0, 0);   }
+}
+@keyframes vt-slide-right-leave {
+    to {  transform: translate3d(100%, 0, 0);   }
+}
+
+/********************************************** 渐入渐出 *********************************************/
+
+.vt-fade-enter-active,.vt-fade-leave-active{ transition: all .4s }
+.vt-fade-enter,.vt-fade-leave-active{ opacity:  0 ;  }
+
+@keyframes vt-fade-in {
+    from {  opacity: 0;  } to {  opacity: 1;  }
+}
+@keyframes vt-fade-out {
+    from {  opacity: 1;  } to {  opacity: 0;  }
+}
+
+
+/********************************************** 旋转 *********************************************/
+
+@keyframes vt-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/********************************************** 旋转 *********************************************/
+@keyframes vt-facebook-pulse {
+    10% {
+        margin-top: 5px;
+        height: 22px;
+        border-color: fade(@color-theme,30%);
+        background-color:fade(@color-theme,60%);
+    }
+    20% {
+        margin-top: 0px;
+        height: 32px;
+        border-color: fade(@color-theme,50%);
+        background-color: fade(@color-theme,80%);
+    }
+    30% {
+        margin-top: 1px;
+        height: 30px;
+        border-color: fade(@color-theme,70%);
+        background-color: fade(@color-theme,100%);
+    }
+    40% {
+        margin-top: 3px;
+        height: 26px;
+    }
+    50% {
+        margin-top: 5px;
+        height: 22px;
+    }
+    60% {
+        margin-top: 6px;
+        height: 18px;
+    }
+}
+
+/********************************************** 拉伸   *********************************************/
+@keyframes vt-stretch  {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }  20% {
+           transform: scaleY(1.0);
+           -webkit-transform: scaleY(1.0);
+       }
+}
+
+/********************************************** 旋转面板  *********************************************/
+@keyframes vt-rotate-plane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+      } 100% {
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
+}
+/********************************************** 反弹   *********************************************/
+@keyframes vt-bounce{
+    0%, 80%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 40% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+      }
+}

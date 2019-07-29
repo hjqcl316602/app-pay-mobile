@@ -1,0 +1,371 @@
+@import '../theme/theme.less';
+
+//************************************************ 行高   **********************************************************/
+//************************************************ 按钮   **********************************************************/
+
+.vp-btn,
+button {
+    display: inline-block;
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
+[class*='vp-btn'] {
+    position: relative;
+    overflow: hidden;
+}
+[class*='vp-btn']:after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-color: fade(@color-gray, 0);
+    transition: all 0.5s;
+}
+[class*='vp-btn']:active:after {
+    background-color: fade(@color-white, 40);
+}
+
+.vp-btn__submit {
+    height: 36px;
+    width: 100%;
+    background-color: @color-theme;
+    color: @color-white;
+    text-align: center;
+    line-height: 36px;
+    border-radius: 4px;
+}
+.vp-btn__submit.vp-btn--disabled {
+    background-color: @color-line;
+}
+.vp-btn__submit.vp-btn--primary {
+    background-color: transparent;
+    border: 1px solid @color-line;
+    color: @color-dark;
+}
+
+//************************************************ 行高   **********************************************************/
+.vp-row {
+    height: 50px;
+}
+.vp-row--min {
+    min-height: 50px;
+}
+//************************************************ 背景颜色   **********************************************************/
+.vp-bg {
+    background-color: white;
+}
+
+.vp-bg--shade {
+    background-image: linear-gradient(135deg, @color-assist, @color-theme); /*background-image:linear-gradient(to bottom,@color-assist,@color-theme)*/
+}
+.vp-bg--theme {
+    background-color: @color-theme;
+}
+
+.vp-bg--body {
+    background: @color-bgd--body;
+}
+
+//************************************************ 相对位置   **********************************************************/
+.vp-pos {
+    position: relative;
+}
+.vp-pos--inner.vp-pos--header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 60px;
+}
+.vp-pos--inner.vp-pos--footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
+
+.vp-pos--inner.vp-pos--center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+//************************************************ 输入框   **********************************************************/
+
+.vp-input__label{
+    display: flex;
+    width: 100%;
+    position: relative; 
+}
+.vp-input__label  .vp-input__clear { 
+    width: 30px; 
+    height: 36px; 
+    text-align: center;
+    z-index: 1;  
+}
+.vp-input__label .vp-input__inner{
+    flex:1;
+    background-color: transparent;
+    display: inline-block;
+    font-size: inherit;
+    height: 36px;
+    line-height: 36px;
+    outline: 0;
+    width: 100%;
+    padding: 0 10px
+}
+
+.vp-input__label .vp-input__inner::placeholder { 
+    font-size: 12px;
+    color: #dedede
+}
+
+.vp-input__label .vp-input__border{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    display: inline-block;
+    width: 300%;
+    height:1px;
+    transform-origin: 0 0;
+    transform: scale(0.33333);
+    background-color: #dedede;
+    transition: background-color 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.vp-input__inner:focus ~ .vp-input__border{
+    background-color: @color-theme
+}
+
+ 
+// .vp-input__outer {
+//     position: relative;
+// }
+// .vp-input[type='text'],
+// .vp-input[type='password'],
+// .vp-input[type='tel'] {
+//     text-align: left;
+//     -webkit-appearance: none;
+//     background-image: none;
+//     border-radius: 0px;
+//     background-color: transparent;
+//     -webkit-box-sizing: border-box;
+//     box-sizing: border-box;
+//     //border-bottom: 1px solid @color-line;
+//     color: @color-dark;
+//     display: inline-block;
+//     font-size: inherit;
+//     height: 36px;
+//     line-height: 1;
+//     outline: 0;
+//     padding: 0 15px;
+//     -webkit-transition: border-color 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+//     transition: border-color 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+//     width: 100%;
+//     position: relative;
+// }
+ 
+// .vp-input.vp-input__border:after{
+//   content: '';
+//   z-index: 1;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 400%;
+//   height: 400%;
+//   -webkit-transform: scale(0.25);
+//   transform: scale(0.25);
+//   -webkit-transform-origin: 0 0;
+//   transform-origin: 0 0;
+//   pointer-events: none;
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+//   background: rebeccapurple;
+//   border-bottom:1px solid red;
+// }
+ 
+
+// .vp-input::placeholder {
+//     font-size: 12px;
+//     color: #dedede
+// }
+// .vp-input.vp-input__bg--transparent {
+//     background-color: transparent;
+// }
+// .vp-input.vp-input__border--white {
+//     border: 1px solid rgba(255, 255, 255, 0.6);
+// }
+// .vp-input.vp-input__br-circle {
+//     border-radius: 40px;
+// }
+// .vp-input__outer.is-active .vp-input__inner,
+// .vp-input:focus {
+     
+//     outline: 0;
+// }
+// .vp-input__clear {
+//     position: absolute;
+//     width: 35px;
+//     right: 0;
+//     top: 0;
+//     line-height: 36px; 
+//     text-align: center;
+//     z-index: 1
+// }
+// .vp-input__clear + .vp-input,
+// .vp-input__clear ~ .vp-input {
+//     padding-right: 35px;
+// }
+// .vp-input__label {
+//      display: inline-block;
+//      width: 100%;
+// }
+ 
+
+.vp-file {
+    display: inline-block;
+    position: relative;
+    input {
+        display: none;
+    }
+}
+.vp-file .vp-file--close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%,-50%);
+    padding: 10px
+}
+
+/******************************** img ***********************************/
+
+.vp-img__inner {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.vp-img__inner img,
+.vp-img__inner img.vp-img--center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.vp-img__inner img.vp-img--max {
+    max-width: 100%;
+    max-height: 100%;
+}
+.vp-img__inner img.vp-img--cover {
+    width: 100%;
+    height: 100%;
+}
+
+.vp-img__inner img[src=''],
+.vp-img__inner img:not([src]) {
+    opacity: 0;
+}
+.vp-img__inner img.vp-img--error {
+    display: none;
+}
+
+.vp-img__inner img[src=''] + img.vp-img--error,
+.vp-img__inner img:not([src]) + img.vp-img--error {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.vp-img__inner img[src=''] + img.vp-img--error.vp-img--half,
+.vp-img__inner img:not([src]) + img.vp-img--error.vp-img--half {
+    display: block;
+    width: 50%;
+    height: 50%;
+}
+
+.vp-img__inner.vp-img__circle[data-round='35'] {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.vp-img__inner.vp-img__circle[data-round='30'] {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.vp-img__inner.vp-img__circle[data-round='60'] {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.vp-img__inner.vp-img__circle[data-round='80'] {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+/******************************** 高度随宽度自适应 ***********************************/
+.vp-ratio {
+}
+.vp-ratio__outer {
+    position: relative;
+    height: 0;
+    width: 100%;
+}
+.vp-ratio__inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.vp-ratio__outer[data-ratio='1:1'],
+.vp-ratio__outer[data-ratio='100%'] {
+    padding-top: 100%;
+}
+.vp-ratio__outer[data-ratio='2:1'],
+.vp-ratio__outer[data-ratio='50%'] {
+    padding-top: 50%;
+}
+.vp-ratio__outer[data-ratio='4:3'],
+.vp-ratio__outer[data-ratio='75%'] {
+    padding-top: 75%;
+}
+
+/******************************* border-radius **********************************/
+.vp-br {
+    border-radius: 4px;
+}
+
+/******************************** 基础样式 ***********************************/
+.vp-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+}
+.vp-footer--shadow {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.vp-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+}
+.vp-header--shadow {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
