@@ -1,8 +1,7 @@
 import axios from './axios';
 import configs from '../config';
 import { Check } from 'store-es';
-import { Toast, Dialog } from 'vant';
-
+import { Message } from 'store-vue-ui';
 const url = configs['HTTP_REQUEST'] + '/custom/appeal.do';
 
 const code = {
@@ -48,16 +47,16 @@ export default async function(params, loading = 2) {
 
     promise.then(response => {
       if (response['code'] === code['success']) {
-        Toast(msg['success']);
+        Message.success(msg['success']);
         resolve(response['data']);
       } else if (response['code'] === code['paramsError']) {
-        Toast(msg['paramsError']);
+        Message.danger(msg['paramsError']);
         reject(response);
       } else if (response['code'] === code['fail']) {
-        Toast(response['msg']);
+        Message.danger(response['msg']);
         reject(response);
       } else {
-        Toast(msg['error']);
+        Message.danger(msg['error']);
         reject(response);
       }
     });

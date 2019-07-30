@@ -1,6 +1,6 @@
 import axios from './axios';
 import configs from '../config';
-import { Toast } from 'vant';
+import { Message } from 'store-vue-ui';
 
 /**
  * 提现
@@ -56,16 +56,16 @@ export default function(params, loading = 2) {
       let isSuccess = Boolean(response['code'] === code['success']);
 
       if (isSuccess) {
-        Toast(msg['success']);
+        Message.success(msg['success']);
         resolve(response);
       } else {
-        Toast(msg['error']);
+        Message.danger(msg['error']);
         reject(response);
       }
     });
 
     promise.catch(error => {
-      Toast(msg['warning']);
+      Message.warning(msg['warning']);
       reject(error);
     });
   });

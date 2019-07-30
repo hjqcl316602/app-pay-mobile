@@ -41,7 +41,6 @@ export default {
       this.params["bankName"] = qrs[1] || "";
       this.params["bankAccount"] = qrs[2] || "";
       this.params["bankMark"] = qrs[3] || "";
-      this.params["isMemo"] = qrs[4] || "false";
       this.params["money"] = (Number(this.fee) / 100).toString();
       setTimeout(() => {
         window.location.href = getAlipayUrl("/alipay", this.params);
@@ -50,10 +49,10 @@ export default {
   },
   methods: {
     copySuccess(e) {
-      this.$Toast("复制成功！" + e.text);
+      this.$message.success("复制成功！" + e.text);
     },
     copyError() {
-      this.$Toast("复制失败！");
+      this.$message.success("复制失败！");
     }
   },
 
@@ -61,7 +60,8 @@ export default {
     backTime: { type: [Number, String] },
     qr: { type: String },
     sn: { type: String },
-    fee: { type: [String, Number] }
+    fee: { type: [String, Number] },
+    payRemark: { type: String }
   }
 };
 </script>
@@ -97,20 +97,20 @@ export default {
                 </p>
               </div>
 
-              <div class="vc-row vc-margin--bm" v-if="params.isMemo == 'true'">
+              <div class="vc-row vc-margin--bm" v-if="!!payRemark">
                 <div class="vc-text--center">
                   <span
                     class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    v-clipboard="sn"
+                    v-clipboard="payRemark"
                     @success="copySuccess"
                     @error="copyError"
                   >
-                    {{ sn }}
+                    {{ payRemark }}
                   </span>
                 </div>
                 <div class="vc-text--center">
                   <span class="vc-text--gray vc-text--sm">
-                    （请务必在付款时添加上该备注，否则充值失败，轻触可复制）
+                    （请务必在转账时添加上该备注，否则充值失败，轻触可复制）
                   </span>
                 </div>
               </div>

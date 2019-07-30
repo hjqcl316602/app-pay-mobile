@@ -36,9 +36,8 @@ export default {
       let qrs = this.qr ? this.qr.split(",") : [];
       this.params["realName"] = qrs[1] || "";
       this.params["userId"] = qrs[2] || "";
-      this.params["isMemo"] = qrs[3] || "false";
       this.params["money"] = (Number(this.fee) / 100).toString();
-      this.params["memo"] = this.params.isMemo === "true" ? this.sn : "";
+      this.params["memo"] = this.payRemark;
       setTimeout(() => {
         window.location.href = getAlipayUrl("/alipay", this.params);
       }, 1000);
@@ -50,7 +49,8 @@ export default {
     backTime: { type: [Number, String] },
     qr: { type: String },
     sn: { type: String },
-    fee: { type: [String, Number] }
+    fee: { type: [String, Number] },
+    payRemark: { type: String }
   }
 };
 </script>

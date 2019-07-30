@@ -91,7 +91,7 @@ export default {
       let connect = this._socket.connect(
         {},
         frame => {
-          this.$toast("聊天室已连接，您可以进行聊天了~");
+          this.$message.success("聊天室已连接，您可以进行聊天了~");
           this.params.socketConneted = true;
           this.params.socketConnetedCount = 0;
           this.subscribeSocketMessage();
@@ -102,7 +102,7 @@ export default {
           this.params.socketConnetedCount++;
           console.log(this.params.socketConnetedCount);
           if (this.params.socketConnetedCount == 10) {
-            this.$toast("聊天室连接失败，请检查网络！");
+            this.$message.danger("聊天室连接失败，请检查网络！");
             this.params.socketConnetedCount = 0;
           } else {
             this.params.socketConneted = false;
@@ -123,7 +123,7 @@ export default {
     closeSocket() {
       if (this._socket) {
         this._socket.disconnect();
-        this.$toast("聊天室已关闭！");
+        this.$message.warning("聊天室已关闭！");
       }
     },
 
@@ -176,7 +176,8 @@ export default {
      */
     getChatHistory(more = false) {
       return new Promise(resolve => {
-        if (this.chat.loading) return this.$toast("请稍等，正在获取聊天记录！");
+        if (this.chat.loading)
+          return this.$message.warning("请稍等，正在获取聊天记录！");
         this.chat.loading = true;
 
         if (more) {
@@ -271,11 +272,7 @@ export default {
         });
         this.custom.message = "";
       } else {
-        this.$toast({
-          message: check["message"],
-          duration: 3000,
-          position: "bottom"
-        });
+        this.$message.danger(check["message"]);
       }
     },
     /**

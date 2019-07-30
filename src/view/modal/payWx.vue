@@ -1,6 +1,8 @@
 <script type="text/ecmascript-6">
 import Vue from "vue";
 import VueQriously from "vue-qriously";
+import VueClipboards from "vue-clipboards";
+Vue.use(VueClipboards);
 Vue.use(VueQriously);
 export default {
   name: "PagePayWx",
@@ -26,6 +28,12 @@ export default {
         this.payCode.size = codeBox ? codeBox.offsetWidth : 0;
         this.payCode.value = this.qr;
       });
+    },
+    handleSuccess(e) {
+      this.$message.success("复制成功！" + e.text);
+    },
+    handleError(e) {
+      this.$message.success("复制失败！");
     }
   },
 
@@ -33,7 +41,8 @@ export default {
     backTime: { type: [Number, String] },
     qr: { type: String },
     sn: { type: String },
-    fee: { type: [String, Number] }
+    fee: { type: [String, Number] },
+    payRemark: { type: String }
   },
   watch: {
     backTime(val) {
@@ -100,6 +109,23 @@ export default {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div
+                v-clipboard="payRemark"
+                @success="handleSuccess"
+                @error="handleError"
+                class=""
+                v-if="!!payRemark"
+              >
+                <div class="vc-text--center">
+                  <span
+                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
+                    >{{ payRemark }}</span
+                  >
+                </div>
+                <div class="vc-text--center">
+                  <span class="vc-text--gray vc-text--mi">(转账时请务必添加上该备注，否则充值不成功，轻触可复制)</span>
                 </div>
               </div>
             </div>

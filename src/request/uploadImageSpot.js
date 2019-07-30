@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Toast } from 'vant';
+import { Message } from 'store-vue-ui';
 
 /**
  * 上传并识别二维码
@@ -66,13 +67,13 @@ export default function(params, loading = true, loadingMsg = '图片上传并识
           resolve(response['data'] || {});
         });
       } else {
-        Toast(msg['error']);
+        Message.warning(msg['error']);
         reject(response);
       }
     });
 
     promise.catch(error => {
-      Toast(msg['warning']);
+      Message.danger(msg['warning']);
       reject(error);
     });
   });

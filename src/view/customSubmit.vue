@@ -69,7 +69,7 @@ export default {
           }, 500);
         });
       } else {
-        this.$Toast(check["message"]);
+        this.$message.danger(check["message"]);
       }
     },
 

@@ -23,7 +23,9 @@ export default {
         fee: "",
         sn: "",
         timeLimit: 0,
-        qr: ""
+        qr: "",
+        needRemark: "",
+        payRemark: ""
       },
       timer: {
         payStatus: null,
@@ -47,8 +49,9 @@ export default {
     async initialize() {
       this.params = Object.assign(this.params, this.$route.params);
       this.params = Object.assign(this.params, this.analysisToken());
-      //console.log(this.params);
-      //console.log(this.analysisToken());
+      console.log(this.params);
+
+      console.log(this.analysisToken());
       this.getOrderMessage();
       this.setTimer("payStatus");
     },
@@ -143,6 +146,7 @@ export default {
       :backTime="params.timeLimit"
       :sn="params.sn"
       :fee="params.fee"
+      :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
     ></payCard>
     <payWx
       v-if="params.payType == 2 && isShow"
@@ -150,6 +154,7 @@ export default {
       :backTime="params.timeLimit"
       :sn="params.sn"
       :fee="params.fee"
+      :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
     ></payWx>
     <template v-if="params.payType == 3 && isShow">
       <payAli
@@ -157,6 +162,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payAli>
     </template>
     <template v-if="params.payType == 4 && isShow">
@@ -165,6 +171,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payUnion>
     </template>
     <template v-if="params.payType == 5 && isShow">
@@ -173,6 +180,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payCardQuick>
     </template>
     <template v-if="params.payType == 6 && isShow">
@@ -181,6 +189,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payAliQuick>
     </template>
   </div>

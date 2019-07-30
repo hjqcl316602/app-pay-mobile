@@ -1,6 +1,6 @@
 import axios from './axios';
 import configs from '../config';
-import { Toast } from 'vant';
+import { Message } from 'store-vue-ui';
 
 /**
  * 获取聊天列表
@@ -42,7 +42,7 @@ export default function(params, loading = 1) {
       if (response.code === code['success']) {
         resolve(response['data']);
       } else {
-        Toast(msg['error']);
+        Message.danger(msg['error']);
         reject(response);
       }
     });

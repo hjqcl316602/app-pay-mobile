@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Toast } from 'vant';
-
+import { Message } from 'store-vue-ui';
 /**
  * 上传图片
  * @param {params} params 参数
@@ -71,13 +71,13 @@ export default function(params, loading = true, loadingMsg = msg['request']) {
           resolve(response['data']);
         });
       } else {
-        Toast(msg['error']); // 会自动挤掉loading
+        Message.warning(msg['error']); // 会自动挤掉loading
         reject(response);
       }
     });
 
     promise.catch(error => {
-      Toast(msg['warning']);
+      Message.danger(msg['warning']);
       reject(error);
     });
   });

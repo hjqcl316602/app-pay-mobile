@@ -25,17 +25,18 @@ export default {
   },
   methods: {
     handleSuccess(e) {
-      this.$Toast("复制成功！" + e.text);
+      this.$message.success("复制成功！" + e.text);
     },
     handleError(e) {
-      this.$Toast("复制失败！");
+      this.$message.success("复制失败！");
     }
   },
   props: {
     backTime: { type: [Number, String] },
     qr: { type: String },
     sn: { type: String },
-    fee: { type: [String, Number] }
+    fee: { type: [String, Number] },
+    payRemark: { type: String }
   }
 };
 </script>
@@ -72,51 +73,74 @@ export default {
                 </p>
               </div>
 
-              <div class="vc-margin--bm  vc-flex vc-flex--between-center ">
-                <div class="vc-text--bold vc-text--gray">
-                  卡号
-                </div>
-                <div class=" vc-text--left">
-                  <button
-                    class="copy-btn vp-btn vc-text--bold  vc-padding"
-                    v-clipboard="params.cardNo"
-                    @success="handleSuccess"
-                    @error="handleError"
+              <div
+                v-clipboard="params.cardNo"
+                @success="handleSuccess"
+                @error="handleError"
+                class="vc-margin--bm"
+              >
+                <div class="vc-text--center">
+                  <span
+                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
+                    >{{ params.cardNo }}</span
                   >
-                    {{ params.cardNo | strCard }}
-                  </button>
+                </div>
+                <div class="vc-text--center">
+                  <span class="vc-text--gray vc-text--mi">(卡号)</span>
                 </div>
               </div>
 
-              <div class="  vc-margin--bm  vc-flex vc-flex--between-center">
-                <div class="vc-text--bold vc-text--gray ">
-                  开户行
-                </div>
-                <div class=" vc-text--right">
-                  <button
-                    class="copy-btn vp-btn vc-text--bold  vc-padding"
-                    v-clipboard="params.cardType"
-                    @success="handleSuccess"
-                    @error="handleError"
+              <div
+                v-clipboard="params.cardType"
+                @success="handleSuccess"
+                @error="handleError"
+                class="vc-margin--bm"
+              >
+                <div class="vc-text--center">
+                  <span
+                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
+                    >{{ params.cardType }}</span
                   >
-                    {{ params.cardType }}
-                  </button>
+                </div>
+                <div class="vc-text--center">
+                  <span class="vc-text--gray vc-text--mi">(开户行)</span>
                 </div>
               </div>
 
-              <div class="vc-flex vc-flex--between-center">
-                <div class="vc-text--bold vc-text--gray   ">
-                  户主
-                </div>
-                <div class=" vc-text--right">
-                  <button
-                    class="copy-btn vp-btn vc-text--bold  vc-padding"
-                    v-clipboard="params.cardName"
-                    @success="handleSuccess"
-                    @error="handleError"
+              <div
+                v-clipboard="params.cardName"
+                @success="handleSuccess"
+                @error="handleError"
+                class="vc-margin--bm"
+              >
+                <div class="vc-text--center">
+                  <span
+                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
+                    >{{ params.cardName }}</span
                   >
-                    {{ params.cardName }}
-                  </button>
+                </div>
+                <div class="vc-text--center">
+                  <span class="vc-text--gray vc-text--mi">(户主)</span>
+                </div>
+              </div>
+
+              <div
+                v-clipboard="payRemark"
+                @success="handleSuccess"
+                @error="handleError"
+                class=""
+                v-if="!!payRemark"
+              >
+                <div class="vc-text--center">
+                  <span
+                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
+                    >{{ payRemark }}</span
+                  >
+                </div>
+                <div class="vc-text--center">
+                  <span class="vc-text--gray vc-text--mi"
+                    >(转账时请务必添加上该备注，否则充值不成功)</span
+                  >
                 </div>
               </div>
             </div>
@@ -130,7 +154,7 @@ export default {
               </p>
               <p>
                 <span class="vc-text--gray"
-                  >单击卡号、开户行、户主均可进行复制</span
+                  >轻触卡号、开户行、户主均可进行复制</span
                 >
               </p>
             </div>

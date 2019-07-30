@@ -23,6 +23,7 @@ function toCardPay(params) {
         actionType: "toCard",
         cardNo: params.cardNo,
         bankAccount: params.bankAccount,
+        amount: params.money,
         money: params.money,
         bankMark: params.bankMark,
         bankName: params.bankName // 该参数不是必填项
@@ -34,22 +35,43 @@ function toCardPay(params) {
  * 支付宝转账支付宝账号
  */
 function toAccountPay(params) {
-  alipayReady(function() {
-    AlipayJSBridge.call("startApp", {
-      appId: APPID_TO_ACCOUNT,
-      param: {
+  function returnApp() {
+    AlipayJSBridge.call("exitApp");
+  }
+
+  function ready(a) {
+    window.AlipayJSBridge
+      ? a && a()
+      : document.addEventListener("AlipayJSBridgeReady", a, !1);
+  }
+  ready(function() {
+    try {
+      var a = {
         actionType: "scan",
-        // u: params.userId,
-        // a: params.money,
-        // m: params.memo,
+        u: params.userId,
+        a: params.money,
+        m: params.memo,
         biz_data: {
           s: "money",
           u: params.userId,
           a: params.money,
-          m: params.memo, 
+          m: params.memo
         }
-      }
-    });
+      };
+    } catch (b) {
+      returnApp();
+    }
+    AlipayJSBridge.call(
+      "startApp",
+      {
+        appId: APPID_TO_ACCOUNT,
+        param: a
+      },
+      function(a) {}
+    );
+  });
+  document.addEventListener("resume", function(a) {
+    returnApp();
   });
 }
 

@@ -11,11 +11,14 @@ import {
   getCardType
 } from "../request";
 import { Checker, funer, Hexer } from "store-es";
-import { Accordion, Input, Upload } from "store-vue-ui";
+import { Accordion, Input, Upload, Confirm } from "store-vue-ui";
+console.log(Confirm);
 Vue.use(Accordion)
   .use(Accordion.Item)
   .use(Input)
-  .use(Upload);
+  .use(Upload)
+  .use(Confirm);
+
 const CODE_TIME = 60 * 1000;
 export default {
   name: "PageDraw",
@@ -66,7 +69,7 @@ export default {
     };
   },
   mounted() {
-    console.log();
+    //console.log(this.$message.danger('cuo'));
   },
   activated() {},
   created() {
@@ -146,54 +149,39 @@ export default {
       return this;
     },
 
+    /**
+     * 选择图片并上传
+     */
+
     async selectImage(fromdata) {
       let type = this.params.type;
       let res = await uploadImageSpot(fromdata);
-      if (res["url"]) {
-        if (type === "2") {
-          if (res["qr"]) {
-            if (!this.jageQrType(configs["QR"]["WX"], res["qr"])) {
-              this.$dialog.alert({
-                title: "提示",
-                message: "您上传的不是微信收款二维码,请重新上传！"
-              });
-            } else {
-              this.$Toast("恭喜您，成功上传并识别收款二维码！");
-              this.wx.qrWeCodeUrl = res["url"];
-              this.wx.wechatUrl = res["qr"];
-            }
-          } else {
-            this.$Toast("恭喜您，成功上传收款二维码！");
-            this.wx.qrWeCodeUrl = res["url"];
-          }
-        } else if (type === "3") {
-          if (res["qr"]) {
-            if (!this.jageQrType(configs["QR"]["ALI"], res["qr"])) {
-              this.$dialog.alert({
-                title: "提示",
-                message: "您上传的不是支付宝收款二维码,请重新上传！"
-              });
-            } else {
-              this.$Toast("恭喜您，成功上传并识别收款二维码！");
-              this.ali.alipayCodeUrl = res["url"];
-              this.ali.alipayUrl = res["qr"];
-            }
-          } else {
-            this.$Toast("恭喜您，成功上传收款二维码！");
-            this.ali.alipayCodeUrl = res["url"];
-          }
-        } else if (type === "4") {
-          if (res["qr"]) {
-            this.$Toast("恭喜您，成功上传并识别收款二维码！");
-            this.union.unionpayCodeUrl = res["url"];
-            this.union.unionpayUrl = res["qr"];
-          } else {
-            this.$Toast("恭喜您，成功上传收款二维码！");
-            this.union.unionpayCodeUrl = res["url"];
-          }
+      if (!res["url"]) {
+        this.$message.danger("二维码上传失败，请重试！");
+        return;
+      }
+      if (!res["qr"]) {
+        this.$message.warning("二维码识别失败，请重试！");
+      }
+      if (type === "2") {
+        if (res["qr"] && !this.jageQrType(configs["QR"]["WX"], res["qr"])) {
+          this.$message.danger("您上传的不是微信收款二维码，请重试");
+          return;
         }
-      } else {
-        this.$Toast("抱歉，收款二维码上传失败，请重试！");
+        this.wx.qrWeCodeUrl = res["url"];
+        this.wx.wechatUrl = res["qr"];
+      }
+      if (type === "3") {
+        if (res["qr"] && !this.jageQrType(configs["QR"]["ALI"], res["qr"])) {
+          this.$message.danger("您上传的不是支付宝收款二维码，请重试");
+          return;
+        }
+        this.ali.alipayCodeUrl = res["url"];
+        this.ali.alipayUrl = res["qr"];
+      }
+      if (type === "4") {
+        this.union.unionpayCodeUrl = res["url"];
+        this.union.unionpayUrl = "";
       }
     },
 
@@ -239,7 +227,7 @@ export default {
         if (check.pass) {
           this.params.popupSubmit = true;
         } else {
-          this.$Toast(check.message);
+          this.$message.danger(check.message);
         }
       } else if (this.params.type == 2) {
         check
@@ -248,7 +236,7 @@ export default {
         if (check.pass) {
           this.params.popupSubmit = true;
         } else {
-          this.$Toast(check.message);
+          this.$message.danger(check.message);
         }
       } else if (this.params.type == 3) {
         check
@@ -258,7 +246,7 @@ export default {
         if (check.pass) {
           this.params.popupSubmit = true;
         } else {
-          this.$Toast(check.message);
+          this.$message.danger(check.message);
         }
       } else if (this.params.type == 4) {
         check
@@ -267,10 +255,10 @@ export default {
         if (check.pass) {
           this.params.popupSubmit = true;
         } else {
-          this.$Toast(check.message);
+          this.$message.danger(check.message);
         }
       } else {
-        this.$Toast("请您选择一种提现方式！");
+        //this.$Toast("请您选择一种提现方式！");
       }
     },
 
@@ -310,9 +298,9 @@ export default {
       let leave = (() => {
         localStorage.setItem("app/draw/type", this.params.type);
         this.$router.replace({
-            name: "DrawStatus",
-            params: { accessToken: this.params.accessToken }
-          });
+          name: "DrawStatus",
+          params: { accessToken: this.params.accessToken }
+        });
       })();
     },
 
@@ -340,356 +328,347 @@ export default {
 </script>
 <template>
   <div class="vv-page ">
-    <van-dialog
-      title="信息确认"
+    <vui-confirm
       v-model="params.popupSubmit"
-      show-cancel-button
-      @confirm="confirmPopupSubmit"
+      title="提现信息确认"
+      @ok="confirmPopupSubmit"
     >
-      <div class="vc-padding vc-text--md">
-        <template v-if="params.type == 1">
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >金额
-            </span>
-            <span class="vc-text--bold">￥ {{ params.fee | strMoney }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >方式</span
-            >
-            <span class="vc-text--bold">银行卡</span>
-          </div>
-
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >姓名</span
-            >
-            <span class="vc-text--bold"> {{ card.bankRealName }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >卡号</span
-            >
-            <span class="vc-text--bold">{{ card.cardNo }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >开户行</span
-            >
-            <span class="vc-text--bold">{{ card.bank }}</span>
-          </div>
-          <div class="" v-flex="{ alignItems: 'flex-start' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >温馨提示</span
-            >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >请确保您输入的银行卡号、真实姓名是真实有效，否则会导致提现失败</span
-            >
-          </div>
-        </template>
-
-        <template v-if="params.type == 2">
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >金额</span
-            >
-            <span class="vc-text--bold">￥ {{ params.fee | strMoney }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >方式</span
-            >
-            <span class="vc-text--bold">微信</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >账号</span
-            >
-            <span class="vc-text--bold">{{ wx.wechat }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'flex-start' }">
+      <template v-if="params.type == 1">
+        <div class="vc-padding">
+          <div class="vc-flex vc-margin--bm">
             <div
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              金额
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">￥ {{ params.fee | strMoney }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              方式
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">银行卡</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              姓名
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ card.bankRealName }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              卡号
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ card.cardNo }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              开户行
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ card.bank }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
+            >
+              温馨提示
+            </div>
+            <div class="vc-flex--fit">
+              <span class=" vc-text--danger"
+                >请确保您输入的银行卡号、真实姓名是真实有效，否则会导致提现失败</span
+              >
+            </div>
+          </div>
+        </div>
+      </template> 
+      <template v-if="params.type == 2">
+        <div class="vc-padding">
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              金额
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">￥ {{ params.fee | strMoney }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              方式
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">微信</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              账号
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ wx.wechat }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
             </div>
-            <div v-css="{ flex: 1 }">
+            <div class="vc-flex--fit">
               <img
                 :src="wx.qrWeCodeUrl"
-                v-css="{ height: '100px', width: 'auto' }"
+                v-css="{ height: '200px', width: 'auto' }"
               />
             </div>
           </div>
-          <div
-            class=""
-            v-flex="{ alignItems: 'flex-start' }"
-            v-if="wx['wechatUrl']"
-          >
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >温馨提示</span
-            >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >请确保您上传的微信收款二维码、微信账号真实有效，否则会导致提现失败</span
-            >
-          </div>
-          <div class="" v-flex="{ alignItems: 'flex-start' }" v-else>
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >提示</span
-            >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >您上传的微信收款二维码未识别成功！
-              您是否确认您上传的收款二维码能正常收款? 否则请重试</span
-            >
-          </div>
-        </template>
-
-        <template v-if="params.type == 3">
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >金额</span
-            >
-            <span class="vc-text--bold">￥ {{ params.fee | strMoney }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >方式</span
-            >
-            <span class="vc-text--bold">支付宝</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >账号</span
-            >
-            <span class="vc-text--bold">{{ ali.alipay }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >姓名</span
-            >
-            <span class="vc-text--bold">{{ ali.alipayRealName }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'flex-start' }">
+          <div class="vc-flex vc-margin--bm" v-if="wx['wechatUrl']">
             <div
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
+            >
+              温馨提示
+            </div>
+            <div class="vc-flex--fit">
+              <span class=" vc-text--danger"
+                >请确保您上传的微信收款二维码、微信账号真实有效，否则会导致提现失败</span
+              >
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm" v-else>
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
+            >
+              提示
+            </div>
+            <div class="vc-flex--fit">
+              <p>
+                <span class="vc-text--danger">
+                  您上传的微信收款二维码未识别成功！</span
+                >
+              </p>
+              <p>
+                <span class=" vc-text--danger"
+                  >您是否确认您上传的收款二维码能正常收款? 否则请重试</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-if="params.type == 3">
+        <div class="vc-padding">
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              金额
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">￥ {{ params.fee | strMoney }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              方式
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">支付宝</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              姓名
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ ali.alipayRealName }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              账号
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ ali.alipay }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
             </div>
-            <div v-css="{ flex: 1 }">
+            <div class="vc-flex--fit">
               <img
                 :src="ali.alipayCodeUrl"
-                v-css="{ height: '100px', width: 'auto' }"
+                v-css="{ height: '200px', width: 'auto' }"
               />
             </div>
           </div>
-          <div
-            class=""
-            v-flex="{ alignItems: 'flex-start' }"
-            v-if="ali['alipayUrl']"
-          >
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >温馨提示</span
-            >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >请确保您上传的支付宝收款二维码、姓名、账号是真实有效，否则会导致提现失败</span
-            >
-          </div>
-          <div class="" v-flex="{ alignItems: 'flex-start' }" v-else>
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >提示</span
-            >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >您上传的支付宝收款二维码未识别成功！
-              您是否确认您上传的收款二维码能正常收款? 否则请重试</span
-            >
-          </div>
-        </template>
-
-        <template v-if="params.type == 4">
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >金额</span
-            >
-            <span class="vc-text--bold">￥ {{ params.fee | strMoney }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >方式</span
-            >
-            <span class="vc-text--bold">云闪付</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'center' }">
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              >账号</span
-            >
-            <span class="vc-text--bold">{{ union.unionpay }}</span>
-          </div>
-          <div class="vc-margin--bm" v-flex="{ alignItems: 'flex-start' }">
+          <div class="vc-flex vc-margin--bm" v-if="ali['alipayUrl']">
             <div
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
+            >
+              温馨提示
+            </div>
+            <div class="vc-flex--fit">
+              <span class=" vc-text--danger"
+                >请确保您上传的支付宝收款二维码、支付宝姓名、支付宝账号真实有效，否则会导致提现失败</span
+              >
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm" v-else>
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
+            >
+              提示
+            </div>
+            <div class="vc-flex--fit">
+              <p>
+                <span class="vc-text--danger">
+                  您上传的支付宝收款二维码未识别成功！</span
+                >
+              </p>
+              <p>
+                <span class=" vc-text--danger"
+                  >您是否确认您上传的收款二维码能正常收款? 否则请重试</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-if="params.type == 4">
+        <div class="vc-padding">
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              金额
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">￥ {{ params.fee | strMoney }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              方式
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">云闪付</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
+            >
+              账号
+            </div>
+            <div class="vc-flex--fit">
+              <span class="">{{ union.unionpay }}</span>
+            </div>
+          </div>
+          <div class="vc-flex vc-margin--bm">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
             </div>
-            <div v-css="{ flex: 1 }">
+            <div class="vc-flex--fit">
               <img
                 :src="union.unionpayCodeUrl"
-                v-css="{ height: '100px', width: 'auto' }"
+                v-css="{ height: '200px', width: 'auto' }"
               />
             </div>
           </div>
-          <div
-            class=""
-            v-flex="{ alignItems: 'flex-start' }"
-            v-if="union['unionUrl']"
-          >
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >温馨提示</span
+          <div class="vc-flex vc-margin--bm" v-if="unionpay['unionpayUrl']">
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >请确保您上传的云闪付收款二维码、云闪付账号真实有效，否则会导致提现失败</span
-            >
+              温馨提示
+            </div>
+            <div class="vc-flex--fit">
+              <span class=" vc-text--danger"
+                >请确保您上传的云闪付收款二维码、云闪付账号真实有效，否则会导致提现失败</span
+              >
+            </div>
           </div>
-          <div class="" v-flex="{ alignItems: 'flex-start' }" v-else>
-            <span
-              v-css="{
-                width: '60px',
-                textAlign: 'right',
-                marginRight: 'normal'
-              }"
-              class="vc-text--danger"
-              >提示</span
+          <div class="vc-flex vc-margin--bm" v-else>
+            <div
+              style="width:60px;flex:none"
+              class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
-            <span class="vc-text--danger vc-text--bold" v-css="{ flex: 1 }"
-              >您上传的云闪付收款二维码未识别成功！
-              您是否确认您上传的收款二维码能正常收款? 否则请重试</span
-            >
+              提示
+            </div>
+            <div class="vc-flex--fit">
+              <p>
+                <span class="vc-text--danger">
+                  您上传的云闪付收款二维码未识别成功！</span
+                >
+              </p>
+              <p>
+                <span class=" vc-text--danger"
+                  >您是否确认您上传的收款二维码能正常收款? 否则请重试</span
+                >
+              </p>
+            </div>
           </div>
-        </template>
-      </div>
-    </van-dialog>
+        </div>
+      </template>
+    </vui-confirm>
 
     <div class="vc-fluid--h-min vp-bg vc-padding__lg">
       <div class="vc-margin__lg--bm" v-if="false">

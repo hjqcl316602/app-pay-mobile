@@ -7099,9 +7099,9 @@ store-vue-directive@^1.0.5:
   integrity sha1-bpg+aGczG3+9o+OaA6ogLiAc8co=
 
 store-vue-ui@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.npm.taobao.org/store-vue-ui/download/store-vue-ui-1.0.5.tgz#fbe6b52ad6ce8cb866c7d4a304b45614b43c63b9"
-  integrity sha1-++a1KtbOjLhmx9SjBLRWFLQ8Y7k=
+  version "1.0.8"
+  resolved "https://registry.npm.taobao.org/store-vue-ui/download/store-vue-ui-1.0.8.tgz#c0d685268c5950cd637453f7ccef3e680ff2237e"
+  integrity sha1-wNaFJoxZUM1jdFP3zO8+aA/yI34=
 
 stream-browserify@^2.0.1:
   version "2.0.2"

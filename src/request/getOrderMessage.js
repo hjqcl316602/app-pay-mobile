@@ -1,7 +1,6 @@
 import axios from './axios';
 import configs from '../config';
-import { Toast } from 'vant';
-
+import { Message } from 'store-vue-ui';
 /**
  * 获取订单支付状态列表
  * @param {params} params 参数
@@ -43,13 +42,13 @@ export default function(params, loading = 1) {
       if (response['code'] === code['success']) {
         resolve(response['data']);
       } else if (response['code'] === code['paramsError']) {
-        Toast(msg['paramsError']);
+        Message.warning(msg['paramsError']);
         reject(response);
       } else if (response['code'] === code['fail']) {
-        Toast(response['msg']);
+        Message.warning(response['msg']);
         reject(response);
       } else {
-        Toast(msg['error']);
+        Message.danger(msg['error']);
         reject(response);
       }
     });
