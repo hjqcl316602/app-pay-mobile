@@ -72,14 +72,39 @@ export default {
             </div>
             <div class="" style="">
               <div class="vc-text--center vc-margin--bm">
-                <p>
+                <p
+                  v-clipboard="Number(fee) / 100"
+                  @success="handleSuccess"
+                  @error="handleError"
+                >
                   <span style="font-size: 40px;">￥</span>
                   <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
-                  <!-- <FormatMoney :money='fee' money-type='branch'></FormatMoney> -->
                 </p>
-                <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                  请确保付款金额与该金额一致
+                <p>
+                  <span class="vc-text--bold vc-text--danger   vc-text--xl">
+                    请确保付款金额与该金额一致
+                  </span>
                 </p>
+                <div v-if="payRemark">
+                  <p class=" ">
+                    <span class="vc-text--bold vc-text--danger   vc-text--xl">
+                      必须在转账备注中添加付款码
+                    </span>
+                  </p>
+                  <p>
+                    <span
+                      class="vc-text--bold vc-text--xl"
+                      v-clipboard="payRemark"
+                      @success="handleSuccess"
+                      @error="handleError"
+                    >
+                      付款码：
+                      <span class="vc-text--bold vc-text--xl-xx">{{
+                        payRemark
+                      }}</span>
+                    </span>
+                  </p>
+                </div>
               </div>
               <div class="vp-ratio">
                 <div class="vp-ratio__outer" data-ratio="100%">
@@ -116,7 +141,7 @@ export default {
                 @success="handleSuccess"
                 @error="handleError"
                 class=""
-                v-if="!!payRemark"
+                v-if="false"
               >
                 <div class="vc-text--center">
                   <span
@@ -125,7 +150,9 @@ export default {
                   >
                 </div>
                 <div class="vc-text--center">
-                  <span class="vc-text--gray vc-text--mi">(转账时请务必添加上该备注，否则充值不成功，轻触可复制)</span>
+                  <span class="vc-text--gray vc-text--mi"
+                    >(转账时请务必添加上该备注，否则充值不成功，轻触可复制)</span
+                  >
                 </div>
               </div>
             </div>

@@ -87,37 +87,40 @@ export default {
 
             <div>
               <div class="vc-text--center  vc-margin--bm">
-                <p class="vc-margin--bm">
+                <p
+                  class="vc-margin--bm"
+                  v-clipboard="params.money"
+                  @success="copySuccess"
+                  @error="copyError"
+                >
                   <span style="font-size: 40px;">￥</span>
                   <span style="font-size: 1rem;">{{ params.money }}</span>
-                  <!-- <FormatMoney
-                    :money='fee'
-                    money-type='branch'
-                  ></FormatMoney> -->
                 </p>
-              </div>
-
-              <div class="vc-row vc-margin--bm" v-if="!!payRemark">
-                <div class="vc-text--center">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    v-clipboard="payRemark"
-                    @success="copySuccess"
-                    @error="copyError"
-                  >
-                    {{ payRemark }}
-                  </span>
-                </div>
-                <div class="vc-text--center">
-                  <span class="vc-text--gray vc-text--sm">
-                    （请务必在转账时添加上该备注，否则充值失败，轻触可复制）
-                  </span>
-                </div>
               </div>
 
               <div class="vc-text--center">
                 <p class=" vc-text--danger vc-text--bold vc-text--xl">
                   请确保付款金额与该金额一致
+                </p>
+              </div>
+              <div v-if="payRemark" class="vc-text--center">
+                <p class=" ">
+                  <span class="vc-text--bold vc-text--danger  vc-text--xl">
+                    必须在转账备注中添加付款码
+                  </span>
+                </p>
+                <p>
+                  <span
+                    class="vc-text--bold vc-text--xl"
+                    v-clipboard="payRemark"
+                    @success="copySuccess"
+                    @error="copyError"
+                  >
+                    付款码：
+                    <span class="vc-text--bold vc-text--xl-xx">{{
+                      payRemark
+                    }}</span>
+                  </span>
                 </p>
               </div>
             </div>

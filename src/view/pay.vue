@@ -15,7 +15,7 @@ export default {
   components: { payCard, payAli, payWx, payUnion, payAliQuick, payCardQuick },
   data() {
     return {
-      isShow: true, // 是否显示支付页面
+      isShow: false, // 是否显示支付页面
       params: {
         payType: 4,
         token: "",
@@ -74,7 +74,7 @@ export default {
               name: "PayStatus",
               params: { accessToken: this.params.accessToken }
             });
-          }, 1000);
+          }, 50);
         } else {
           if (init) {
             this.params.timeLimit = message["leftTime"]
@@ -141,12 +141,13 @@ export default {
 <template>
   <div>
     <payCard
-      v-if="params.payType == 1 && isShow"
+      v-if="(params.payType == 1 || params.payType == 5) && isShow"
       :qr="params.qr"
       :backTime="params.timeLimit"
       :sn="params.sn"
       :fee="params.fee"
       :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+      :payType="params.payType"
     ></payCard>
     <payWx
       v-if="params.payType == 2 && isShow"
@@ -156,13 +157,14 @@ export default {
       :fee="params.fee"
       :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
     ></payWx>
-    <template v-if="params.payType == 3 && isShow">
+    <template v-if="(params.payType == 3 || params.payType == 6) && isShow">
       <payAli
         :qr="params.qr"
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+        :payType="params.payType"
       ></payAli>
     </template>
     <template v-if="params.payType == 4 && isShow">
@@ -174,7 +176,7 @@ export default {
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payUnion>
     </template>
-    <template v-if="params.payType == 5 && isShow">
+    <!-- <template v-if="params.payType == 5 && isShow">
       <payCardQuick
         :qr="params.qr"
         :backTime="params.timeLimit"
@@ -182,8 +184,8 @@ export default {
         :fee="params.fee"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payCardQuick>
-    </template>
-    <template v-if="params.payType == 6 && isShow">
+    </template> -->
+    <!-- <template v-if="params.payType == 6 && isShow">
       <payAliQuick
         :qr="params.qr"
         :backTime="params.timeLimit"
@@ -191,7 +193,7 @@ export default {
         :fee="params.fee"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       ></payAliQuick>
-    </template>
+    </template> -->
   </div>
 </template>
 <style scoped>

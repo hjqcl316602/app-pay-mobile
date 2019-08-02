@@ -56,5 +56,6 @@ configs['KEY_PUBLIC'] = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCe7Lpl8hr97DVLzrR
 configs['QR'] = {};
 configs['QR']['WX'] = ['alipay']; // 反面判断不是微信
 configs['QR']['ALI'] = ['wxp', 'weixin']; // 反面判断不是支付宝
+configs['QR']['UNION'] = ['alipay','wxp', 'weixin']; // 反面判断不是支付宝
 
 export default configs;

@@ -180,8 +180,12 @@ export default {
         this.ali.alipayUrl = res["qr"];
       }
       if (type === "4") {
+        if (res["qr"] && !this.jageQrType(configs["QR"]["UNION"], res["qr"])) {
+          this.$message.danger("您上传的不是云闪付收款二维码，请重试");
+          return;
+        }
         this.union.unionpayCodeUrl = res["url"];
-        this.union.unionpayUrl = "";
+        this.union.unionpayUrl = res["qr"]
       }
     },
 
@@ -337,7 +341,7 @@ export default {
         <div class="vc-padding">
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               金额
@@ -348,7 +352,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               方式
@@ -359,7 +363,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               姓名
@@ -370,7 +374,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               卡号
@@ -381,7 +385,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               开户行
@@ -392,7 +396,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               温馨提示
@@ -409,7 +413,7 @@ export default {
         <div class="vc-padding">
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               金额
@@ -420,7 +424,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               方式
@@ -431,7 +435,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               账号
@@ -442,7 +446,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
@@ -456,7 +460,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm" v-if="wx['wechatUrl']">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               温馨提示
@@ -469,7 +473,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm" v-else>
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               提示
@@ -493,7 +497,7 @@ export default {
         <div class="vc-padding">
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               金额
@@ -504,7 +508,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               方式
@@ -515,7 +519,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               姓名
@@ -526,7 +530,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               账号
@@ -537,7 +541,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
@@ -551,7 +555,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm" v-if="ali['alipayUrl']">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               温馨提示
@@ -564,7 +568,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm" v-else>
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               提示
@@ -588,7 +592,7 @@ export default {
         <div class="vc-padding">
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               金额
@@ -599,7 +603,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               方式
@@ -610,7 +614,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               账号
@@ -621,7 +625,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt"
             >
               二维码
@@ -633,9 +637,9 @@ export default {
               />
             </div>
           </div>
-          <div class="vc-flex vc-margin--bm" v-if="unionpay['unionpayUrl']">
+          <div class="vc-flex vc-margin--bm" v-if="union['unionpayUrl']">
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               温馨提示
@@ -648,7 +652,7 @@ export default {
           </div>
           <div class="vc-flex vc-margin--bm" v-else>
             <div
-              style="width:60px;flex:none"
+              style="width:80px;flex:none"
               class="vc-text--right vc-text--light vc-padding--rt vc-text--danger"
             >
               提示

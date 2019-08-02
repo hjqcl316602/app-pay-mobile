@@ -1,15 +1,37 @@
 <script type="text/ecmascript-6">
 import Vue from "vue";
 import VueQriously from "vue-qriously";
-import { Storager } from "store-es";
+import { Storager, Queryer, Urler } from "store-es";
 import VueClipboards from "vue-clipboards";
 Vue.use(VueClipboards);
 Vue.use(VueQriously);
+
+const APPID_TO_ALIPAY = "20000067";
+/**
+ * 跳转到支付宝内部，指定的路径和参数的传递
+ */
+function getAlipayUrl(path, params) {
+  let query = new Queryer();
+  let urler = new Urler();
+  let href = window.location.href;
+  let index = href.indexOf("#");
+  let url = urler.encodeURIComponent(
+    href.substring(0, index + 1) + path + query.stringify(params)
+  );
+  return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
+}
 export default {
   name: "PagePayAli",
 
   data() {
     return {
+      params: {
+        qr: "",
+        realName: "",
+        userId: "",
+        memo: "",
+        money: ""
+      },
       payCode: {
         value: "",
         size: 300,
@@ -21,19 +43,31 @@ export default {
     };
   },
 
-  computed: {
-    params() {
-      let params = {};
-      let qrs = this.qr ? this.qr.split(",") : [];
-      params.qr = qrs[0];
-      params.realName = qrs[1];
-      return params;
-    }
-  },
   mounted() {
+    this.getParams();
     this.setCode();
   },
   methods: {
+    getParams() {
+      let qrs = this.qr ? this.qr.split(",") : [];
+      this.params.qr = qrs[0] || "";
+      this.params.realName = qrs[1] || "";
+      this.params.userId = qrs[2] || "";
+      this.params.memo = this.payRemark;
+      this.params.money = (Number(this.fee) / 100).toString();
+      if (this.payType == 6) {
+        let params = {
+          type: "toAccount",
+          userId: this.params.userId,
+          memo: this.params.memo,
+          money: this.params.money
+        };
+        setTimeout(() => {
+          window.location.href = getAlipayUrl("/alipay", params);
+        }, 1000);
+      }
+    },
+
     /**
      * 设置二维码的宽度
      */
@@ -56,7 +90,8 @@ export default {
     qr: { type: String },
     sn: { type: String },
     fee: { type: [String, Number] },
-    payRemark: { type: String }
+    payRemark: { type: String },
+    payType: { type: [String, Number] }
   }
 };
 </script>
@@ -90,8 +125,11 @@ export default {
                     money-type='branch'
                   ></FormatMoney> -->
                 </p>
-                <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                  请确保付款金额与该金额一致
+
+                <p>
+                  <span class="vc-text--bold vc-text--danger   vc-text--xl">
+                    请勿修改转账信息
+                  </span>
                 </p>
               </div>
               <div class="vp-ratio">
@@ -126,10 +164,10 @@ export default {
                 </div>
               </div>
               <div
-                v-clipboard="payRemark"
+                v-clipboard="params.realName"
                 @success="handleSuccess"
                 @error="handleError"
-                class="vc-margin--bm"
+                class=""
                 v-if="!!params.realName"
               >
                 <div class="vc-text--center">
@@ -140,7 +178,7 @@ export default {
                 </div>
                 <div class="vc-text--center">
                   <span class="vc-text--gray vc-text--mi"
-                    >(收款人真实姓名,轻触可复制)</span
+                    >(收款人真实姓名)</span
                   >
                 </div>
               </div>
@@ -150,7 +188,7 @@ export default {
                 @success="handleSuccess"
                 @error="handleError"
                 class=""
-                v-if="!!payRemark"
+                v-if="false"
               >
                 <div class="vc-text--center">
                   <span
