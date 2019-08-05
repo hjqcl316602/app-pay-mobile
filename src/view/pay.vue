@@ -51,7 +51,7 @@ export default {
       this.params = Object.assign(this.params, this.analysisToken());
       console.log(this.params);
 
-      console.log(this.analysisToken());
+      //console.log(this.analysisToken());
       this.getOrderMessage();
       this.setTimer("payStatus");
     },

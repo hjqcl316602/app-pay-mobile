@@ -1,3 +1,4 @@
+const payBefore = r => require.ensure([], () => r(require('@/view/payBefore.vue')), 'payBefore');
 const pay = r => require.ensure([], () => r(require('@/view/pay.vue')), 'pay');
 const payStatus = r => require.ensure([], () => r(require('@/view/payStatus.vue')), 'payStatus');
 const draw = r => require.ensure([], () => r(require('@/view/draw.vue')), 'draw');
@@ -11,9 +12,10 @@ const customDetail = r => require.ensure([], () => r(require('@/view/customDetai
 const alipay = r => require.ensure([], () => r(require('@/view/alipay.vue')), 'alipay');
 
 export default [
-  { path: '*', redirect: '/error' },
-  { path: '/', redirect: '/error' },
+  { path: '*', redirect: '/payBefore' },
+  { path: '/', redirect: '/payBefore' },
   { path: '/error', name: 'Error', component: error, meta: { keepAlive: false, title: '反馈', isLogin: false } },
+  { path: '/payBefore', name: 'payBefore', component: payBefore, meta: { keepAlive: false, title: '信息填写', isLogin: false } },
   { path: '/pay/:accessToken/:token/:payType', name: 'Pay', component: pay, meta: { keepAlive: false, title: '支付', isLogin: false } },
   { path: '/payStatus/:accessToken', name: 'PayStatus', component: payStatus, meta: { keepAlive: false, title: '支付状态', isLogin: false } },
   { path: '/draw/:accessToken/:token', name: 'Draw', component: draw, meta: { keepAlive: false, title: '提现', isLogin: false } },
