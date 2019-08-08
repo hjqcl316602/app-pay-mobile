@@ -15,6 +15,7 @@ instance.props = {};
 instance.data = function() {
   return {
     resource: {
+      alicard: require("../images/icon-ali-card.png"),
       card: require("../images/icon-card.png"),
       wx: require("../images/icon-wx.png"),
       ali: require("../images/icon-ali.png"),
@@ -29,12 +30,11 @@ instance.data = function() {
       }
     },
     options: [
-      { text: "银行卡", value: "1" },
-      { text: "微信", value: "2" },
-      { text: "支付宝", value: "3" },
-      { text: "云闪付", value: "4" },
+      { text: "支付宝", value: "6" },
       { text: "支付宝转卡", value: "5" },
-      { text: "支付宝转账", value: "6" }
+      { text: "云闪付", value: "4" },
+      { text: "微信", value: "2" },
+      { text: "银行卡", value: "1" }
     ],
     moneyOptions: [10, 20, 50, 100, 200, 500, 1000, 2000, 10000]
   };
@@ -132,61 +132,7 @@ export default instance;
           <span class="vc-text--bold   vc-text--light">充值方式</span>
         </div>
         <vui-accordion v-model="params.type">
-          <vui-accordion-item name="1" :max-height="0">
-            <div
-              slot="header"
-              class="vc-flex--between-center vc-border--bm vc-padding--ud"
-            >
-              <div class="vc-flex vc-items--center">
-                <vui-image
-                  width="24px"
-                  height="24px"
-                  fill-type="cover"
-                  :src="resource.card"
-                  alignType="center"
-                  :lazy="false"
-                ></vui-image>
-                <span class="vc-margin--lt">银行卡</span>
-              </div>
-              <div>
-                <vui-icon
-                  :size="20"
-                  :name="
-                    params.type != '1' ? 'check-crilce' : 'radio-button-on'
-                  "
-                  :color="params.type != '1' ? '#dedede' : '#118eea'"
-                ></vui-icon>
-              </div>
-            </div>
-          </vui-accordion-item>
-          <vui-accordion-item name="2" :max-height="0">
-            <div
-              slot="header"
-              class="vc-flex--between-center vc-border--bm vc-padding--ud"
-            >
-              <div class="vc-flex vc-items--center">
-                <vui-image
-                  width="24px"
-                  height="24px"
-                  fill-type="cover"
-                  :src="resource.wx"
-                  alignType="center"
-                  :lazy="false"
-                ></vui-image>
-                <span class="vc-margin--lt">微信</span>
-              </div>
-              <div>
-                <vui-icon
-                  :size="20"
-                  :name="
-                    params.type != '2' ? 'check-crilce' : 'radio-button-on'
-                  "
-                  :color="params.type != '2' ? '#dedede' : '#118eea'"
-                ></vui-icon>
-              </div>
-            </div>
-          </vui-accordion-item>
-          <vui-accordion-item name="3" :max-height="0">
+          <vui-accordion-item name="6" :max-height="0">
             <div
               slot="header"
               class="vc-flex--between-center vc-border--bm vc-padding--ud"
@@ -206,14 +152,40 @@ export default instance;
                 <vui-icon
                   :size="20"
                   :name="
-                    params.type != '3' ? 'check-crilce' : 'radio-button-on'
+                    params.type != '6' ? 'check-crilce' : 'radio-button-on'
                   "
-                  :color="params.type != '3' ? '#dedede' : '#118eea'"
+                  :color="params.type != '6' ? '#dedede' : '#118eea'"
                 ></vui-icon>
               </div>
             </div>
           </vui-accordion-item>
-
+          <vui-accordion-item name="5" :max-height="0">
+            <div
+              slot="header"
+              class="vc-flex--between-center vc-border--bm vc-padding--ud"
+            >
+              <div class="vc-flex vc-items--center">
+                <vui-image
+                  width="24px"
+                  height="24px"
+                  fill-type="cover"
+                  :src="resource.alicard"
+                  alignType="center"
+                  :lazy="false"
+                ></vui-image>
+                <span class="vc-margin--lt">支付宝转卡</span>
+              </div>
+              <div>
+                <vui-icon
+                  :size="20"
+                  :name="
+                    params.type != '5' ? 'check-crilce' : 'radio-button-on'
+                  "
+                  :color="params.type != '5' ? '#dedede' : '#118eea'"
+                ></vui-icon>
+              </div>
+            </div>
+          </vui-accordion-item>
           <vui-accordion-item name="4" :max-height="0">
             <div
               slot="header"
@@ -242,7 +214,7 @@ export default instance;
             </div>
           </vui-accordion-item>
 
-          <vui-accordion-item name="5" :max-height="0">
+          <vui-accordion-item name="2" :max-height="0">
             <div
               slot="header"
               class="vc-flex--between-center vc-border--bm vc-padding--ud"
@@ -252,16 +224,30 @@ export default instance;
                   width="24px"
                   height="24px"
                   fill-type="cover"
-                  :src="resource.ali"
+                  :src="resource.wx"
                   alignType="center"
                   :lazy="false"
-                  class="vc-margin--rt"
                 ></vui-image>
+                <span class="vc-margin--lt">微信</span>
+              </div>
+              <div>
                 <vui-icon
-                  name="arrow-right"
-                  class="vc-margin--rt"
-                  color="#dedede"
+                  :size="20"
+                  :name="
+                    params.type != '2' ? 'check-crilce' : 'radio-button-on'
+                  "
+                  :color="params.type != '2' ? '#dedede' : '#118eea'"
                 ></vui-icon>
+              </div>
+            </div>
+          </vui-accordion-item>
+
+          <vui-accordion-item name="1" :max-height="0">
+            <div
+              slot="header"
+              class="vc-flex--between-center vc-border--bm vc-padding--ud"
+            >
+              <div class="vc-flex vc-items--center">
                 <vui-image
                   width="24px"
                   height="24px"
@@ -270,57 +256,15 @@ export default instance;
                   alignType="center"
                   :lazy="false"
                 ></vui-image>
-                <span class="vc-margin--lt">支付宝转卡</span>
+                <span class="vc-margin--lt">银联</span>
               </div>
               <div>
                 <vui-icon
                   :size="20"
                   :name="
-                    params.type != '5' ? 'check-crilce' : 'radio-button-on'
+                    params.type != '1' ? 'check-crilce' : 'radio-button-on'
                   "
-                  :color="params.type != '5' ? '#dedede' : '#118eea'"
-                ></vui-icon>
-              </div>
-            </div>
-          </vui-accordion-item>
-
-          <vui-accordion-item name="6" :max-height="0">
-            <div
-              slot="header"
-              class="vc-flex--between-center vc-border--bm vc-padding--ud"
-            >
-              <div class="vc-flex vc-items--center">
-                <vui-image
-                  width="24px"
-                  height="24px"
-                  fill-type="cover"
-                  :src="resource.ali"
-                  alignType="center"
-                  :lazy="false"
-                  class="vc-margin--rt"
-                ></vui-image>
-                <vui-icon
-                  name="arrow-right"
-                  class="vc-margin--rt"
-                  color="#dedede"
-                ></vui-icon>
-                <vui-image
-                  width="24px"
-                  height="24px"
-                  fill-type="cover"
-                  :src="resource.ali"
-                  alignType="center"
-                  :lazy="false"
-                ></vui-image>
-                <span class="vc-margin--lt">支付宝转账</span>
-              </div>
-              <div>
-                <vui-icon
-                  :size="20"
-                  :name="
-                    params.type != '6' ? 'check-crilce' : 'radio-button-on'
-                  "
-                  :color="params.type != '6' ? '#dedede' : '#118eea'"
+                  :color="params.type != '1' ? '#dedede' : '#118eea'"
                 ></vui-icon>
               </div>
             </div>
