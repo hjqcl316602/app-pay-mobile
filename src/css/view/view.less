@@ -53,7 +53,7 @@
 
 .vv-pay__body--outer {
   width: 100%;
-  max-width: 380px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -128,3 +128,37 @@
   background-image: url('../../images/icon-money.png');
   background-repeat: no-repeat;
 }
+
+.vv-side {
+  position: fixed;
+  bottom: 0;
+  z-index: 9;
+  width: 100%;
+  max-width: 500px;
+  text-align: right;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vv-side-item {
+  text-align: center;
+  line-height: 50px;
+  padding: 0 10px;
+}
+
+
+// .vv-side-item {
+//   display: inline-block;
+//   width: 36px;
+//   height: 36px;
+//   text-align: center;
+//   line-height: 36px;
+//   background-color: #fff;
+//   border-radius: 50%;
+//   box-shadow: 0 0 2px rgba(0, 0, 0, .8);
+//   margin-left: 10px
+// }

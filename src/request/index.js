@@ -13,3 +13,5 @@ export { default as uploadImage } from './uploadImage';
 export { default as uploadImageSpot } from './uploadImageSpot';
 
 export { default as createSocket } from './createSocket';
+
+export { default as cancelOrder } from './cancelOrder';

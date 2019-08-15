@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:33:13
+ * @LastEditors: Please set LastEditors
+ -->
 <script type="text/ecmascript-6">
 import Vue from "vue";
 import VueQriously from "vue-qriously";
@@ -106,7 +113,7 @@ export default {
     </div>
     <div
       class="vc-fluid--h-min vc-flex--center vv-bg--ali  "
-      style="padding: 20px;"
+      style="padding: 20px 20px 70px"
     >
       <div class="vv-pay__body--outer" style="">
         <div class="vv-pay__body--inner ali vp-bg">

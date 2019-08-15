@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:29:58
+ * @LastEditors: Please set LastEditors
+ -->
 <script type="text/ecmascript-6">
 import Vue from "vue";
 import VueQriously from "vue-qriously";
@@ -63,7 +70,7 @@ export default {
     </div>
     <div
       class="vc-fluid--h-min vc-flex--center vv-bg--union  "
-      style="padding: 20px;"
+      style="padding: 20px 20px 70px"
     >
       <div class="vv-pay__body--outer" style="">
         <div class="vv-pay__body--inner union vp-bg">
@@ -82,12 +89,12 @@ export default {
                   <span style="font-size: 40px;">￥</span>
                   <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
                 </p>
-                <p>
+                <p v-if="payRemark.length !== 6">
                   <span class="vc-text--bold vc-text--danger   vc-text--xl">
                     请确保付款金额与该金额一致
                   </span>
                 </p>
-                <div v-if="payRemark">
+                <div v-if="payRemark && payRemark.length !== 6">
                   <p class=" ">
                     <span class="vc-text--bold vc-text--danger   vc-text--xl">
                       必须在转账备注中添加付款码

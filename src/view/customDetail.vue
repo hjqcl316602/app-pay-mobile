@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:41:35
+ * @LastEditors: Please set LastEditors
+ -->
 <script>
 import { Upload, Pic, Ratio, Tag, Icon } from "../components";
 import { Checker } from "store-es";
@@ -472,7 +479,7 @@ export default {
     </div>
     <div class="vv-footer">
       <div class="vv-footer__content">
-        <div class="" style="width:40px;">
+        <div class="" style="width:24px;">
           <Upload @change="selectPic"></Upload>
         </div>
         <div class="vc-flex--fit">
@@ -485,7 +492,10 @@ export default {
           />
         </div>
         <div class="">
-          <div class="vc-btn vc-btn--primary is-radius" @click="sendMessage">
+          <div
+            class="vc-btn vc-btn--primary vc-btn--small is-radius"
+            @click="sendMessage"
+          >
             发送
           </div>
         </div>

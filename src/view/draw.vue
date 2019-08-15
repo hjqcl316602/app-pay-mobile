@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 16:04:58
+ * @LastEditors: Please set LastEditors
+ -->
 <script >
 import Vue from "vue";
 
@@ -41,7 +48,8 @@ export default {
         fee: "",
         memId: "",
         subMemId: "",
-        mobile: ""
+        mobile: "",
+        appId:''
       },
       wx: {
         wechat: "",
@@ -303,7 +311,7 @@ export default {
         localStorage.setItem("app/draw/type", this.params.type);
         this.$router.replace({
           name: "DrawStatus",
-          params: { accessToken: this.params.accessToken }
+          params: { accessToken: this.params.accessToken , appId : this.params.appId }
         });
       })();
     },

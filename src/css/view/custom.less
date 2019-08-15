@@ -31,7 +31,7 @@
   max-height: 75vh;
   overflow-y: scroll
 }
- 
+
 
 //**************************************** 申诉详情 ************************************/
 
@@ -45,23 +45,27 @@
     background: #fff;
     box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, .2);
   }
-  .vv-cell{
-    height:60px;
+
+  .vv-cell {
+    height: 60px;
     padding: 0 15px;
   }
 
-  .vv-header__detail{
+  .vv-header__detail {
     max-height: 0;
     overflow: hidden;
     transition: max-height .3s ease-out
   }
-  .vv-header__detail.is-show{
+
+  .vv-header__detail.is-show {
     max-height: 200px;
   }
-  .vv-header__switch{
+
+  .vv-header__switch {
     transition: transform .3s ease-out
   }
-  .vv-header__switch.is-open{
+
+  .vv-header__switch.is-open {
     transform: rotate(180deg)
   }
 
@@ -79,7 +83,7 @@
   .vv-footer__content {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding: 0 20px;
   }
 
   .vv-footer__btn {
@@ -87,7 +91,7 @@
   }
 
   .vv-body {
-    height:100vh;
+    height: 100vh;
     padding-top: 60px;
     padding-bottom: 65px;
     overflow: scroll;
@@ -108,31 +112,29 @@
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: 40px;
-    height:40px;
+    height: 40px;
     padding: 5px;
     background: #fff;
     border-radius: 100%;
     overflow: hidden;
   }
 
-  .vv-chat__head--inner{ 
-    width:100%;
-    height:100%;
+  .vv-chat__head--inner {
+    width: 100%;
+    height: 100%;
     border-radius: 100%;
     overflow: hidden;
   }
 
-  .vv-chat__item.is-left .vv-chat__head--inner{
+  .vv-chat__item.is-left .vv-chat__head--inner {
     background: #ed4014
   }
 
-  .vv-chat__item.is-right .vv-chat__head--inner{
+  .vv-chat__item.is-right .vv-chat__head--inner {
     background: #f0a70a
   }
-  
-  .vv-chat__panel{
 
-  }
+  .vv-chat__panel {}
 
   .vv-chat__content {
     background: #fff;

@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 16:19:20
+ * @LastEditors: Please set LastEditors
+ */
 import axios from './axiosInstance';
 
 import { Toast } from 'vant';
@@ -23,6 +30,8 @@ let msg = {
   unKnown: '异常，未知错误，请重试！',
   error: '异常，未知错误，请重试!'
 };
+
+let loadingStatus = false; // 判断接口是否正在调用
 
 export default function(url, params, configs, loading = 1, loadingMsg = msg['loading']) {
   let isLoadingAnimate = true;

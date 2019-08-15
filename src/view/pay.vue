@@ -1,5 +1,13 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:21:17
+ * @LastEditors: Please set LastEditors
+ -->
 <script type="text/ecmascript-6">
-import { getOrderMessage } from "../request";
+import Vue from "vue";
+import { getOrderMessage, cancelOrder } from "../request";
 import {
   payCard,
   payAli,
@@ -9,7 +17,8 @@ import {
   payCardQuick
 } from "./index.js";
 import { Hexer, Urler, Queryer } from "store-es";
-
+import { Confirm } from "store-vue-ui";
+Vue.use(Confirm);
 export default {
   name: "PagePays",
   components: { payCard, payAli, payWx, payUnion, payAliQuick, payCardQuick },
@@ -20,18 +29,23 @@ export default {
         payType: 4,
         token: "",
         accessToken: "",
+        appId: "",
         fee: "",
         sn: "",
         timeLimit: 0,
         qr: "",
         needRemark: "",
-        payRemark: ""
+        payRemark: "",
+        orderId: ""
       },
       timer: {
         payStatus: null,
         payStatusDuration: 5 * 1000,
         payTime: null,
         payTimeDuration: 1 * 1000
+      },
+      cancel: {
+        popup: false
       }
     };
   },
@@ -67,12 +81,16 @@ export default {
         init ? 2 : 1
       ).then(message => {
         let status = message["status"];
+        this.params.orderId = message["orderId"];
 
         if (status === 0 || status === 3) {
           setTimeout(() => {
             this.$router.replace({
               name: "PayStatus",
-              params: { accessToken: this.params.accessToken }
+              params: {
+                accessToken: this.params.accessToken,
+                appId: this.params.appId
+              }
             });
           }, 50);
         } else {
@@ -129,6 +147,34 @@ export default {
     clearTimer(type) {
       clearInterval(this.timer[type]);
       this.timer[type] = null;
+    },
+    selectSide(type) {
+      if (type === "cancel") {
+        this.cancel.popup = true;
+      } else {
+        this.$router.push({
+          name: "CustomDetail",
+          params: {
+            appId: this.params.appId,
+            accessToken: this.params.accessToken
+          },
+          query: { orderId: this.params.orderId }
+        });
+      }
+    },
+    cancelOrder() {
+      cancelOrder({ accessToken: this.params.accessToken }).then(res => {
+        console.log(res);
+        setTimeout(() => {
+          this.$router.replace({
+            name: "PayStatus",
+            params: {
+              accessToken: this.params.accessToken,
+              appId: this.params.appId
+            }
+          });
+        }, 50);
+      });
     }
   },
   // 页面离开时清除定时器
@@ -139,9 +185,25 @@ export default {
 };
 </script>
 <template>
-  <div>
+  <div v-if="isShow">
+    <vui-confirm v-model="cancel.popup" title="信息确认" @ok="cancelOrder">
+      <div class="vc-padding vc-text--center">
+        <span class="vc-text--danger">是否确定取消该充值订单?</span>
+      </div>
+    </vui-confirm>
+    <div class="vv-side">
+      <div class="vv-side-item vc-text--theme" @click="selectSide('customer')">
+        <span>客服</span>
+        <i class="iconfont icon-customer" style="font-size:16px"></i>
+      </div>
+      <div class="vv-side-item vc-text--danger" @click="selectSide('cancel')">
+        <span>取消</span>
+        <i class="iconfont icon-quxiao" style="font-size:16px"></i>
+      </div>
+    </div>
+
     <payCard
-      v-if="(params.payType == 1 || params.payType == 5) && isShow"
+      v-if="params.payType == 1 || params.payType == 5"
       :qr="params.qr"
       :backTime="params.timeLimit"
       :sn="params.sn"
@@ -150,14 +212,14 @@ export default {
       :payType="params.payType"
     ></payCard>
     <payWx
-      v-if="params.payType == 2 && isShow"
+      v-if="params.payType == 2"
       :qr="params.qr"
       :backTime="params.timeLimit"
       :sn="params.sn"
       :fee="params.fee"
       :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
     ></payWx>
-    <template v-if="(params.payType == 3 || params.payType == 6) && isShow">
+    <template v-if="params.payType == 3 || params.payType == 6">
       <payAli
         :qr="params.qr"
         :backTime="params.timeLimit"
@@ -167,7 +229,7 @@ export default {
         :payType="params.payType"
       ></payAli>
     </template>
-    <template v-if="params.payType == 4 && isShow">
+    <template v-if="params.payType == 4">
       <payUnion
         :qr="params.qr"
         :backTime="params.timeLimit"

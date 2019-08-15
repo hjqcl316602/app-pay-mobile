@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:34:18
+ * @LastEditors: Please set LastEditors
+ -->
 <script type="text/ecmascript-6">
 import { getOrderMessage } from "../request";
 
@@ -7,8 +14,9 @@ export default {
 
   data() {
     return {
-      accessToken: "",
       params: {
+        accessToken: "",
+        appId: "",
         status: "",
         money: "",
         createTime: "",
@@ -28,16 +36,34 @@ export default {
      * 页面初始化
      */
     async initPage() {
-      this.accessToken = this.$route.params["accessToken"];
-      let message = await getOrderMessage({ accessToken: this.accessToken });
-      this.params = Object.assign({}, message);
+      this.params = Object.assign(this.params, this.$route.params);
+      let message = await getOrderMessage({
+        accessToken: this.params.accessToken
+      });
+      this.params = Object.assign(this.params, message);
+    },
+    toCustomer() {
+      this.$router.push({
+        name: "CustomDetail",
+        params: {
+          appId: this.params.appId,
+          accessToken: this.params.accessToken
+        },
+        query: { orderId: this.params.orderId }
+      });
     }
   }
 };
 </script>
 <template>
   <div class="vv-page">
-    <div class="vc-fluid--h-min vc-padding__lg vp-bg">
+    <div class="vv-side">
+      <div class="vv-side-item vc-text--theme" @click="toCustomer">
+        <span>客服</span>
+        <i class="iconfont icon-customer" style="font-size:16px"></i>
+      </div>
+    </div>
+    <div class="vc-fluid--h-min vp-bg" style="padding: 20px 20px 70px">
       <div class="vp-ratio">
         <div class="vp-ratio__outer" data-ratio="75%">
           <div class="vp-ratio__inner vp-bg vc-flex--center">

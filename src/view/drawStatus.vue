@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 10:02:13
+ * @LastEditTime: 2019-08-15 17:34:27
+ * @LastEditors: Please set LastEditors
+ -->
 <script type="text/ecmascript-6">
 import { getOrderMessage } from "../request";
 
@@ -17,7 +24,11 @@ export default {
         status: "",
         channelOrderId: "", // 流水号,
 
-        timer: null
+        timer: null,
+        appId: "",
+        orderId: "",
+        accessToken: "",
+        appId: ""
       },
 
       options: {
@@ -29,9 +40,7 @@ export default {
           "订单已完成",
           "订单申诉中..."
         ]
-      },
-
-      accessToken: ""
+      }
     };
   },
   mounted() {
@@ -40,7 +49,7 @@ export default {
   activated() {},
   methods: {
     async init() {
-      this.accessToken = this.$route["params"]["accessToken"];
+      this.params = Object.assign(this.params, this.$route.params);
       this.setPayStatusTimer();
     },
 
@@ -49,8 +58,9 @@ export default {
      */
 
     getPayStatus() {
-      getOrderMessage({ accessToken: this.accessToken }).then(res => {
+      getOrderMessage({ accessToken: this.params.accessToken }).then(res => {
         this.params = Object.assign(this.params, res);
+        console.log(this.params);
       });
     },
 
@@ -62,7 +72,7 @@ export default {
         })
         .then(() => {
           this.clearPayStatusTimer();
-          this.$confirmWithdraw({ accessToken: this.accessToken }).then(
+          this.$confirmWithdraw({ accessToken: this.params.accessToken }).then(
             response => {
               this.setPayStatusTimer();
             }
@@ -87,23 +97,34 @@ export default {
     clearPayStatusTimer() {
       clearInterval(this.params.timer);
       this.params.timer = null;
+    },
+    toCustomer() {
+      this.$router.push({
+        name: "CustomDetail",
+        params: {
+          appId: this.params.appId,
+          accessToken: this.params.accessToken
+        },
+        query: { orderId: this.params.orderId }
+      });
     }
   },
   beforeDestroy() {
     this.clearPayStatusTimer();
-  },
-  watch: {
-    "": {
-      handler(val, olval) {},
-      deep: true,
-      immediate: true
-    }
   }
 };
 </script>
 <template>
   <div class="vv-page">
-    <div class="vc-fluid--h-min vp-bg vc-padding__lg">
+    <div class="vv-side">
+      <div class="vv-side-item" @click="toCustomer">
+        <i
+          class="iconfont icon-customer vc-text--theme "
+          style="font-size:28px"
+        ></i>
+      </div>
+    </div>
+    <div class="vc-fluid--h-min vp-bg " style="padding: 20px 20px 70px">
       <div class="vp-ratio ">
         <div class="vp-ratio__outer" data-ratio="75%">
           <div class="vp-ratio__inner  vc-flex--center">
