@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-05 09:34:19
+ * @LastEditTime: 2019-08-16 12:31:15
+ * @LastEditors: Please set LastEditors
+ -->
 <script>
 import configs from "../config";
 import Vue from "vue";
