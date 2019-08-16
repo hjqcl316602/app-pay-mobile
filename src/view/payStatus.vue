@@ -58,7 +58,7 @@ export default {
 <template>
   <div class="vv-page">
     <div class="vv-side">
-      <div class="vv-side-item vc-text--theme" @click="toCustomer">
+      <div class="vv-side-item vc-text--warning" @click="toCustomer">
         <span>客服</span>
         <i class="iconfont icon-customer" style="font-size:16px"></i>
       </div>

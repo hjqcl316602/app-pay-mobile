@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:21:17
+ * @LastEditTime: 2019-08-15 18:52:29
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -151,7 +151,7 @@ export default {
     selectSide(type) {
       if (type === "cancel") {
         this.cancel.popup = true;
-      } else {
+      } else if (type === "customer") {
         this.$router.push({
           name: "CustomDetail",
           params: {
@@ -160,6 +160,12 @@ export default {
           },
           query: { orderId: this.params.orderId }
         });
+      } else if (type === "alipay") {
+        if (this.params.payType == 5) {
+          this.$refs["payCard"].getParams(true);
+        } else {
+          this.$refs["payAli"].getParams(true);
+        }
       }
     },
     cancelOrder() {
@@ -192,13 +198,24 @@ export default {
       </div>
     </vui-confirm>
     <div class="vv-side">
-      <div class="vv-side-item vc-text--theme" @click="selectSide('customer')">
-        <span>客服</span>
-        <i class="iconfont icon-customer" style="font-size:16px"></i>
+      <div
+        class="vv-side-item vc-text--theme"
+        @click="selectSide('alipay')"
+        v-if="params.payType == 6 || params.payType == 5"
+      >
+        <span>支付宝</span>
+        <i class="iconfont icon-jiantou" style="font-size:16px"></i>
       </div>
       <div class="vv-side-item vc-text--danger" @click="selectSide('cancel')">
         <span>取消</span>
         <i class="iconfont icon-quxiao" style="font-size:16px"></i>
+      </div>
+      <div
+        class="vv-side-item vc-text--warning"
+        @click="selectSide('customer')"
+      >
+        <span>客服</span>
+        <i class="iconfont icon-customer" style="font-size:16px"></i>
       </div>
     </div>
 
@@ -210,6 +227,7 @@ export default {
       :fee="params.fee"
       :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
       :payType="params.payType"
+      ref="payCard"
     ></payCard>
     <payWx
       v-if="params.payType == 2"
@@ -227,6 +245,7 @@ export default {
         :fee="params.fee"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
         :payType="params.payType"
+        ref="payAli"
       ></payAli>
     </template>
     <template v-if="params.payType == 4">

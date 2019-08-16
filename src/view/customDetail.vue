@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:41:35
+ * @LastEditTime: 2019-08-16 09:40:36
  * @LastEditors: Please set LastEditors
  -->
 <script>
@@ -424,17 +424,18 @@ export default {
       </div>
     </div>
 
-    <div class="vv-header" ref="header">
+    <div class="vv-header" v-if="false">
+      <div class="vc-text--center" style="line-height:50px">
+        <span class="vc-text--bold">{{ result["orderSn"] }}</span>
+      </div>
+    </div>
+
+    <div class="vv-header" ref="header" v-if="false">
       <div class=" vv-cell vc-flex--between-center vc-border--bm ">
         <span class="vc-text vc-text--break vc-text--bold">
           {{ result["orderSn"] }}
         </span>
         <div>
-          <!-- <span
-            class='vc-margin__lg--rt vc-text--bold '
-            :class="{ 'vc-text--danger':result['khStatus']　=== 0 || result['khStatus']　=== 1 }"
-          > {{ result['khStatus'] | strOrderStatus }}</span> -->
-
           <Icon
             name="icon-arrow "
             class="vv-header__switch "
@@ -479,7 +480,7 @@ export default {
     </div>
     <div class="vv-footer">
       <div class="vv-footer__content">
-        <div class="" style="width:24px;">
+        <div class="" style="width:28px;">
           <Upload @change="selectPic"></Upload>
         </div>
         <div class="vc-flex--fit">

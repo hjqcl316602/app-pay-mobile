@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:33:13
+ * @LastEditTime: 2019-08-15 18:53:19
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -55,7 +55,8 @@ export default {
     this.setCode();
   },
   methods: {
-    getParams() {
+    getParams(quick = false) {
+      console.log("sshsh");
       let qrs = this.qr ? this.qr.split(",") : [];
       this.params.qr = qrs[0] || "";
       this.params.realName = qrs[1] || "";
@@ -69,9 +70,12 @@ export default {
           memo: this.params.memo,
           money: this.params.money
         };
-        setTimeout(() => {
-          window.location.href = getAlipayUrl("/alipay", params);
-        }, 1000);
+        setTimeout(
+          () => {
+            window.location.href = getAlipayUrl("/alipay", params);
+          },
+          quick ? 10 : 1000
+        );
       }
     },
 

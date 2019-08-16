@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:29:27
+ * @LastEditTime: 2019-08-15 18:53:08
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -43,7 +43,8 @@ export default {
     this.getParams();
   },
   methods: {
-    getParams() {
+    getParams(quick = false) {
+      console.log("getParams");
       let qrs = this.qr ? this.qr.split(",") : [];
       this.params.cardNo = qrs[0] || "";
       this.params.bankName = qrs[1] || "";
@@ -51,9 +52,12 @@ export default {
       this.params.bankMark = qrs[3] || "";
       this.params.money = (Number(this.fee) / 100).toString();
       if (this.payType == 5) {
-        setTimeout(() => {
-          window.location.href = getAlipayUrl("/alipay", this.params);
-        }, 1000);
+        setTimeout(
+          () => {
+            window.location.href = getAlipayUrl("/alipay", this.params);
+          },
+          quick ? 10 : 1000
+        );
       }
     },
     handleSuccess(e) {
