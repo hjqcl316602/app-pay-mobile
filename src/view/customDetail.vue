@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 09:40:36
+ * @LastEditTime: 2019-08-16 10:25:22
  * @LastEditors: Please set LastEditors
  -->
 <script>
@@ -66,7 +66,7 @@ export default {
 
   mounted() {
     this.init();
-    this.hanlderHeaderVisibility();
+    //this.hanlderHeaderVisibility();
   },
   methods: {
     /**
