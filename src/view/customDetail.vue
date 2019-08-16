@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 10:25:22
+ * @LastEditTime: 2019-08-16 10:33:38
  * @LastEditors: Please set LastEditors
  -->
 <script>
@@ -424,7 +424,7 @@ export default {
       </div>
     </div>
 
-    <div class="vv-header" v-if="false">
+    <div class="vv-header">
       <div class="vc-text--center" style="line-height:50px">
         <span class="vc-text--bold">{{ result["orderSn"] }}</span>
       </div>
