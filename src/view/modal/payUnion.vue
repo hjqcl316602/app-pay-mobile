@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:29:58
+ * @LastEditTime: 2019-08-17 18:26:11
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -89,31 +89,33 @@ export default {
                   <span style="font-size: 40px;">￥</span>
                   <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
                 </p>
-                <p v-if="payRemark.length !== 6">
-                  <span class="vc-text--bold vc-text--danger   vc-text--xl">
-                    请确保付款金额与该金额一致
-                  </span>
-                </p>
-                <div v-if="payRemark && payRemark.length !== 6">
-                  <p class=" ">
-                    <span class="vc-text--bold vc-text--danger   vc-text--xl">
-                      必须在转账备注中添加付款码
-                    </span>
-                  </p>
+                <template v-if="payRemark.length !== 6">
                   <p>
-                    <span
-                      class="vc-text--bold vc-text--xl"
-                      v-clipboard="payRemark"
-                      @success="handleSuccess"
-                      @error="handleError"
-                    >
-                      付款码：
-                      <span class="vc-text--bold vc-text--xl-xx">{{
-                        payRemark
-                      }}</span>
+                    <span class="vc-text--bold vc-text--danger   vc-text--xl">
+                      请确保付款金额与该金额一致
                     </span>
                   </p>
-                </div>
+                  <div v-if="payRemark.length === 4">
+                    <p class=" ">
+                      <span class="vc-text--bold vc-text--danger   vc-text--xl">
+                        必须在转账备注中添加付款码
+                      </span>
+                    </p>
+                    <p>
+                      <span
+                        class="vc-text--bold vc-text--xl"
+                        v-clipboard="payRemark"
+                        @success="handleSuccess"
+                        @error="handleError"
+                      >
+                        付款码：
+                        <span class="vc-text--bold vc-text--xl-xx">{{
+                          payRemark
+                        }}</span>
+                      </span>
+                    </p>
+                  </div>
+                </template>
               </div>
               <div class="vp-ratio">
                 <div class="vp-ratio__outer" data-ratio="100%">

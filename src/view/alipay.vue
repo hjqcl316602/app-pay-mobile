@@ -2,228 +2,170 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 18:43:20
+ * @LastEditTime: 2019-08-17 17:48:01
  * @LastEditors: Please set LastEditors
  -->
 <script>
 import Vue from "vue";
+import { Hexer, Urler, Queryer } from "store-es";
 import VueQriously from "vue-qriously";
+
 Vue.use(VueQriously);
-const TYPE_PAY = ["toCard", "toAccount"];
-const APPID_TO_CARD = "09999988";
-const APPID_TO_ACCOUNT = "20000123";
-/**
- * 调用支付宝API前初始化
- */
-function alipayReady(callback) {
+
+function readyAlipay(callback) {
+  // 如果jsbridge已经注入则直接调用
   if (window.AlipayJSBridge) {
     callback && callback();
   } else {
+    // 如果没有注入则监听注入的事件
     document.addEventListener("AlipayJSBridgeReady", callback, false);
   }
 }
-/**
- * 支付宝转账到银行卡
- */
-function toCardPay(params) {
-  alipayReady(function() {
-    AlipayJSBridge.call("startApp", {
-      appId: APPID_TO_CARD,
-      param: {
-        actionType: "toCard",
-        cardNo: params.cardNo,
-        bankAccount: params.bankAccount,
-        amount: params.money,
-        money: params.money,
-        bankMark: params.bankMark,
-        bankName: params.bankName // 该参数不是必填项
-      }
-    });
-  });
-}
-/**
- * 支付宝转账支付宝账号
- */
-function toAccountPay(params) {
-  function returnApp() {
-    AlipayJSBridge.call("exitApp");
-  }
-
-  function ready(a) {
-    window.AlipayJSBridge
-      ? a && a()
-      : document.addEventListener("AlipayJSBridgeReady", a, !1);
-  }
-  ready(function() {
-    try {
-      var a = {
-        actionType: "scan",
-        u: params.userId,
-        a: params.money,
-        m: params.memo,
-        biz_data: {
-          s: "money",
-          u: params.userId,
-          a: params.money,
-          m: params.memo
-        }
-      };
-    } catch (b) {
-      returnApp();
-    }
-    AlipayJSBridge.call(
-      "startApp",
-      {
-        appId: APPID_TO_ACCOUNT,
-        param: a
-      },
-      function(a) {}
-    );
-  });
-  document.addEventListener("resume", function(a) {
-    returnApp();
-  });
-}
-
 export default {
   name: "alipay",
   data() {
     return {
-      message: "",
-      status: true,
-      qr:
-        "https://ds.alipay.com/?from=mobilecodec&scheme=alipays%3A%2F%2Fplatformapi%2Fstartapp%3FappId%3D20000200%26actionType%3DtoAccount%26account%3D13980464237%26amount%3D100%26userId%3D2088002357544150",
+      params: {
+        token: "",
+        qr: "",
+        image: "",
+        payType: "",
+        loading: "loading"
+      },
       payCode: {
         value: "",
         size: 300,
         backgroundAlpha: 1,
         background: "white",
         foreground: "black",
-        level: "H"
+        level: "L"
       }
     };
   },
-  mounted() {
-    // setTimeout(() => {
-    //   let href =
-    //     "https://ds.alipay.com/?from=mobilecodec&scheme=alipays%3A%2F%2Fplatformapi%2Fstartapp%3FappId%3D20000200%26actionType%3DtoAccount%26account%3D13980464237%26amount%3D100%26userId%3D2088802680692010";
-    //   //alert(href);
-    //   window.location.href = href;
-    // }, 500);
-    // this.$nextTick(() => {
-    //   let query = this.$route.query || {};
-    //   //alert(JSON.stringify(query));
-    //   try {
-    //     this.status = true;
-    //     query["type"] === "toCard"
-    //       ? toCardPay(query)
-    //       : query["type"] === "toAccount"
-    //       ? toAccountPay(query)
-    //       : void 0;
-    //   } catch (e) {
-    //     this.status = false;
-    //     this.message = "支付失败，请重试！";
-    //   }
-    // });
-  },
   methods: {
-    selectSide(type) {
-      if (type === "scan") {
-        alipayReady(() => {
-          AlipayJSBridge.call(
-            "scan",
-            {
-              type: "qrcode",
-              actionType: "scanAndRoute"
-              //qrcode
-            },
-            function(value) {
-              //alert(JSON.stringify(value));
-            }
-          );
+    initialize() {
+      this.params.loading = "loading";
+      this.params = Object.assign(this.params, this.$route.params);
+      this.params = Object.assign(this.params, this.analysisToken());
+      let qrs = this.params["qr"] ? this.params["qr"].split(",") : [];
+      this.params.qr = qrs[0] || "";
+
+      this.params.image = qrs[1] || "";
+      let image = new Image();
+      image.src = this.params.image;
+
+      image.onload = e => {
+        setTimeout(() => {
+          this.params.loading = "loaded";
+        }, 500);
+      };
+      image.onerror = e => {
+        this.params.loading = "error";
+      };
+      // if (this.params.payType == 3) {
+      //   setTimeout(() => {
+      //     readyAlipay(function() {
+      //       AlipayJSBridge.call(
+      //         "scan",
+      //         {
+      //           type: "qr",
+      //           actionType: "scanAndRoute" // 跳转到结果
+      //         },
+      //         function(result) {}
+      //       );
+      //     });
+      //   }, 0);
+      // }
+    },
+    getImage() {
+      let canvas = document.getElementsByTagName("canvas");
+      console.log(canvas);
+
+      setTimeout(() => {
+        console.log(canvas.toDataURL("image/png"));
+      }, 100);
+    },
+    /**
+     * 解析token，16进制转化为字符串
+     */
+    analysisToken() {
+      try {
+        let hex = new Hexer();
+        let hexToString = hex.decodeComponent(this.params.token);
+        let message = JSON.parse(hexToString);
+        return message;
+      } catch (e) {
+        this.$router.replace({
+          name: "Error",
+          query: { msg: "异常，请重试或联系客服！" }
         });
-      } else if (type === "jump") {
-        window.location.href = this.qr;
       }
     }
+  },
+  mounted() {
+    this.initialize();
+    setTimeout(() => {
+      this.getImage();
+    }, 2000);
   }
 };
 </script>
 
 <template>
   <div class="vv-page">
-    <div class="vv-side">
-      <div class="vv-side-item vc-text--theme" @click="selectSide('scan')">
-        <span>扫一扫</span>
-        <i class="iconfont icon-saoyisao" style="font-size:16px"></i>
-      </div>
-      <div class="vv-side-item vc-text--danger" @click="selectSide('jump')">
-        <span>跳转</span>
-        <i class="iconfont icon-jiantou" style="font-size:16px"></i>
-      </div>
-    </div>
     <div
-      class="vc-fluid--h-min vp-bg vc-padding__lg vc-flex--center"
-      style="padding-bottom:70px"
+      class="vc-fluid--h-min vc-flex--center vp-bg vc-padding__lg"
+      v-if="params.payType == 6"
     >
-      <div>
-        <div class="vc-text--center vc-padding__lg">
-          <img
-            v-if="true"
-            src="../images/code6.png"
-            alt=""
-            style="max-width:100%;max-height:400px"
-          />
-          <qriously
-            v-if="false"
-            :value="qr"
-            :size="payCode.size"
-            :level="payCode.level"
-            :background="payCode.background"
-            :foreground="payCode.foreground"
-            :backgroundAlpha="payCode.backgroundAlpha"
-          />
+      <!-- <qriously
+        :value="params.qr"
+        :size="payCode.size"
+        :level="payCode.level"
+        :background="payCode.background"
+        :foreground="payCode.foreground"
+        :backgroundAlpha="payCode.backgroundAlpha"
+      /> -->
+      <!-- <img
+        src="http://trade.bstchain.com/upload/e346c41c-0466-44be-b782-a9a829ee6c20.jpg"
+        alt=""
+        style="max-width:100%;"
+      /> -->
+      <!-- <img src="../images/code3.jpg" alt="" style="max-width:100%" /> -->
+      <div v-if="false">
+        <div class="vc-margin--bm">
+          <div
+            class="vc-flex--center"
+            v-if="params.loading === 'loading'"
+            style="height:200px"
+          >
+            <div class="">
+              <div class="vc-text--center vc-margin--bm">
+                <van-loading></van-loading>
+              </div>
+              <div class="vc-text--center">
+                <span class="vc-text--light">图片加载中...</span>
+              </div>
+            </div>
+          </div>
+          <div v-if="params.loading === 'loaded'">
+            <img :src="this.params.image" alt="" style="max-width:100%;" />
+          </div>
+          <div v-if="params.loading === 'error'">
+            <div class="vc-text--center">
+              <span class="vc-text--danger">图片加载失败</span>
+            </div>
+          </div>
         </div>
         <div>
-          <p class="vc-text--danger vc-text--baseline--md vc-text--bold">
-            识别方式：
+          <p class="vc-text--danger vc-text--bold vc-text--center">
+            长按二维码识别
           </p>
-          <p
-            class="vc-text--danger vc-text--baseline--md"
-            style="text-indent:20px"
-          >
-            ①长按二维码识别
-          </p>
-          <p
-            class="vc-text--danger vc-text--baseline--md"
-            style="text-indent:20px"
-          >
-            ②单击下方跳转按钮直接跳转
-          </p>
-          <p
-            class="vc-text--danger vc-text--baseline--md"
-            style="text-indent:20px"
-          >
-            ③长按二维码保存或截屏，单击下方扫一扫按钮识别二维码
-          </p>
-          <p class="vc-text--danger vc-text--baseline--md vc-text--bold">
-            温馨提示：
-          </p>
-          <p
-            class="vc-text--danger vc-text--baseline--md"
-            style="text-indent:20px"
-          >
-            如若前两种方式识别出现异常，请切换至第三种方式，若三种方式均失败请更换充值方式
+          <p class="vc-text--danger vc-text--center">
+            如若不能识别二维码，请长按保存图片或截频保存至相册，打开扫一扫，
+            从本地相册选取该图片进行识别
           </p>
         </div>
       </div>
-    </div>
-
-    <div v-if="!status">
-      <div v-css="{ textAlign: 'center', marginBottom: 'large' }">
-        <img src="../images/icon-pay-error.png" alt="" style="width: 30px;" />
-      </div>
-      <span v-css="{ color: 'danger' }">{{ message }}</span>
     </div>
   </div>
 </template>

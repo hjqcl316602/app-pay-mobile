@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 18:52:29
+ * @LastEditTime: 2019-08-17 17:49:36
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -19,6 +19,21 @@ import {
 import { Hexer, Urler, Queryer } from "store-es";
 import { Confirm } from "store-vue-ui";
 Vue.use(Confirm);
+
+const APPID_TO_ALIPAY = "20000067";
+/**
+ * 跳转到支付宝内部，指定的路径和参数的传递
+ */
+function getAlipayUrl(path, params) {
+  let query = new Queryer();
+  let urler = new Urler();
+  let href = window.location.href;
+  let index = href.indexOf("#");
+  let url = urler.encodeURIComponent(
+    href.substring(0, index + 1) + path + query.stringify(params)
+  );
+  return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
+}
 export default {
   name: "PagePays",
   components: { payCard, payAli, payWx, payUnion, payAliQuick, payCardQuick },
@@ -161,11 +176,19 @@ export default {
           query: { orderId: this.params.orderId }
         });
       } else if (type === "alipay") {
-        if (this.params.payType == 5) {
-          this.$refs["payCard"].getParams(true);
-        } else {
-          this.$refs["payAli"].getParams(true);
+        if (this.params.payType == 1 || this.params.payType == 5) {
+          window.location.href = "alipays://";
         }
+        if (this.params.payType == 6) {
+          // this.$router.push(
+          //   `/alipay/${this.params.token}/${this.params.payType}`
+          // );
+          // window.location.href = getAlipayUrl(
+          //   `/alipay/${this.params.token}/${this.params.payType}`
+          // );
+        }
+      } else if (type === "wx") {
+        window.location.href = "weixin://";
       }
     },
     cancelOrder() {
@@ -199,9 +222,17 @@ export default {
     </vui-confirm>
     <div class="vv-side">
       <div
-        class="vv-side-item vc-text--theme"
+        class="vv-side-item vv-text--wx"
+        @click="selectSide('wx')"
+        v-if="params.payType == 2"
+      >
+        <span>微信</span>
+        <i class="iconfont icon-jiantou" style="font-size:16px"></i>
+      </div>
+      <div
+        class="vv-side-item vv-text--ali"
         @click="selectSide('alipay')"
-        v-if="params.payType == 6 || params.payType == 5"
+        v-if="params.payType == 5 || params.payType == 1"
       >
         <span>支付宝</span>
         <i class="iconfont icon-jiantou" style="font-size:16px"></i>
@@ -245,6 +276,7 @@ export default {
         :fee="params.fee"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
         :payType="params.payType"
+        :token="params.token"
         ref="payAli"
       ></payAli>
     </template>

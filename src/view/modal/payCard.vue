@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 11:08:59
+ * @LastEditTime: 2019-08-17 14:18:00
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -40,26 +40,18 @@ export default {
     };
   },
   mounted() {
-    this.getParams();
+    this.initialize(); 
   },
   methods: {
-    getParams(quick = false) {
+    initialize() {
       let qrs = this.qr ? this.qr.split(",") : [];
       this.params.cardNo = qrs[0] || "";
       this.params.bankName = qrs[1] || "";
       this.params.bankAccount = qrs[2] || "";
       this.params.bankMark = qrs[3] || "";
       this.params.money = (Number(this.fee) / 100).toString();
-      if (this.payType == 5) {
-        if (quick) {
-          window.location.href = getAlipayUrl("/alipay", this.params);
-        } else {
-          setTimeout(() => {
-            window.location.href = getAlipayUrl("/alipay", this.params);
-          }, 1000);
-        }
-      }
     },
+    
     handleSuccess(e) {
       this.$message.success("复制成功！" + e.text);
     },
@@ -110,11 +102,7 @@ export default {
                   <!-- <span style="font-size: 1rem;">{{ fee | strMoney }}</span> -->
                 </p>
                 <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                  {{
-                    payType == 5
-                      ? "请勿修改转账信息"
-                      : "请确保付款金额与该金额一致"
-                  }}
+                  请确保付款金额与该金额一致
                 </p>
                 <div v-if="payRemark">
                   <p class=" ">

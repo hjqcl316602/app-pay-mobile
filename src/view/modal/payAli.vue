@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 15:47:27
+ * @LastEditTime: 2019-08-17 18:26:41
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -13,20 +13,6 @@ import VueClipboards from "vue-clipboards";
 Vue.use(VueClipboards);
 Vue.use(VueQriously);
 
-const APPID_TO_ALIPAY = "20000067";
-/**
- * 跳转到支付宝内部，指定的路径和参数的传递
- */
-function getAlipayUrl(path, params) {
-  let query = new Queryer();
-  let urler = new Urler();
-  let href = window.location.href;
-  let index = href.indexOf("#");
-  let url = urler.encodeURIComponent(
-    href.substring(0, index + 1) + path + query.stringify(params)
-  );
-  return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
-}
 export default {
   name: "PagePayAli",
 
@@ -51,32 +37,51 @@ export default {
   },
 
   mounted() {
-    this.getParams();
+    this.initialize();
     this.setCode();
+    //this.goAplipay();
   },
   methods: {
-    getParams(quick = false) {
+    initialize() {
       let qrs = this.qr ? this.qr.split(",") : [];
       this.params.qr = qrs[0] || "";
-      this.params.realName = qrs[1] || "";
-      this.params.userId = qrs[2] || "";
-      this.params.memo = this.payRemark;
-      this.params.money = (Number(this.fee) / 100).toString();
-      if (this.payType == 6) {
-        let params = {
-          type: "toAccount",
-          userId: this.params.userId,
-          memo: this.params.memo,
-          money: this.params.money
-        };
-        if (quick) {
-          window.location.href = getAlipayUrl("/alipay?time=1000", params);
-        } else {
-          setTimeout(() => {
-            window.location.href = getAlipayUrl("/alipay?time=1000", params);
-          }, 1000);
-        }
+      if (this.payType === 3) {
+        this.params.realName = qrs[1] || "";
       }
+    },
+    goAplipay(isAlipay = true, quick = false) {
+      // if (isAlipay) {
+      //   if (quick) {
+      //     window.location.href = getAlipayUrl("/alipay/" + this.token);
+      //   } else {
+      //     setTimeout(() => {
+      //       window.location.href = getAlipayUrl("/alipay/" + this.token);
+      //     }, 1000);
+      //   }
+      // } else {
+      //   this.$router.push("/alipay/" + this.token);
+      // }
+      // let qrs = this.qr ? this.qr.split(",") : [];
+      // this.params.qr = qrs[0] || "";
+      // this.params.realName = qrs[1] || "";
+      // this.params.userId = qrs[2] || "";
+      // this.params.memo = this.payRemark;
+      // this.params.money = (Number(this.fee) / 100).toString();
+      // if (this.payType == 6) {
+      //   let params = {
+      //     type: "toAccount",
+      //     userId: this.params.userId,
+      //     memo: this.params.memo,
+      //     money: this.params.money
+      //   };
+      //   if (quick) {
+      //     window.location.href = getAlipayUrl("/alipay", params);
+      //   } else {
+      //     setTimeout(() => {
+      //       window.location.href = getAlipayUrl("/alipay", params);
+      //     }, 1000);
+      //   }
+      // }
     },
 
     /**
@@ -102,7 +107,8 @@ export default {
     sn: { type: String },
     fee: { type: [String, Number] },
     payRemark: { type: String },
-    payType: { type: [String, Number] }
+    payType: { type: [String, Number] },
+    token: { type: [String] }
   }
 };
 </script>
@@ -137,11 +143,60 @@ export default {
                   ></FormatMoney> -->
                 </p>
 
-                <p>
-                  <span class="vc-text--bold vc-text--danger   vc-text--xl">
-                    请勿修改转账信息
-                  </span>
-                </p>
+                <template v-if="payType == 3">
+                  <div>
+                    <span class="vc-text--bold vc-text--danger vc-text--xl">
+                      请勿修改付款金额
+                    </span>
+                  </div>
+                  <div v-if="payRemark.length === 4">
+                    <p class="">
+                      <span class="vc-text--bold vc-text--danger vc-text--xl">
+                        必须在转账备注中添加付款码
+                      </span>
+                    </p>
+                    <p>
+                      <span
+                        class="vc-text--bold vc-text--xl"
+                        v-clipboard="payRemark"
+                        @success="handleSuccess"
+                        @error="handleError"
+                      >
+                        付款码：
+                        <span class="vc-text--bold vc-text--xl-xx">{{
+                          payRemark
+                        }}</span>
+                      </span>
+                    </p>
+                  </div>
+                </template>
+                <template v-if="payType == 6 && payRemark.length !== 6">
+                  <div>
+                    <span class="vc-text--bold vc-text--danger vc-text--xl">
+                      请确保付款金额与该金额一致
+                    </span>
+                  </div>
+                  <div v-if="payRemark.length === 4">
+                    <p class="">
+                      <span class="vc-text--bold vc-text--danger vc-text--xl">
+                        必须在转账备注中添加付款码
+                      </span>
+                    </p>
+                    <p>
+                      <span
+                        class="vc-text--bold vc-text--xl"
+                        v-clipboard="payRemark"
+                        @success="handleSuccess"
+                        @error="handleError"
+                      >
+                        付款码：
+                        <span class="vc-text--bold vc-text--xl-xx">{{
+                          payRemark
+                        }}</span>
+                      </span>
+                    </p>
+                  </div>
+                </template>
               </div>
               <div class="vp-ratio">
                 <div class="vp-ratio__outer" data-ratio="100%">
@@ -215,43 +270,28 @@ export default {
               </div>
             </div>
           </div>
-          <div class=" vc-padding" v-if="false">
-            <div class="vc-flex">
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-jieping1 vv-text--wx vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray"
-                  >将二维码截屏并保存至本地相册
-                </span>
-              </div>
-              <div class="vc-padding__sm--ad vc-padding__lg--tp">
-                <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
-              </div>
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-weixin vv-text--wx vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray"
-                  >打开微信选择扫一扫
-                </span>
-              </div>
-              <div class="vc-padding__sm--ad vc-padding__lg--tp">
-                <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
-              </div>
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-saoyisao vv-text--wx vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray"
-                  >从本地相册选取截屏二维码</span
-                >
-              </div>
-            </div>
-          </div>
 
           <div class=" vc-padding">
-            <div class="vc-flex">
+            <div v-if="false">
+              <p
+                class="vc-text--bold vc-text--danger vc-text--baseline--md vc-text--sm"
+              >
+                支付方式：
+              </p>
+              <p
+                class="vc-text--danger vc-text--baseline--md vc-text--sm"
+                style="text-indent:20px"
+              >
+                ①单击下方支付宝按钮，进入支付宝app，长按页面中二维码识别支付
+              </p>
+              <p
+                class="vc-text--danger vc-text--baseline--md vc-text--sm"
+                style="text-indent:20px"
+              >
+                ②如若不能直接进入支付宝app，则将二维码截屏并保存至本地相册，打开支付宝选择扫一扫，从本地相册选取截屏二维码
+              </p>
+            </div>
+            <div class="vc-flex" v-if="true">
               <div class=" vc-text--center vc-flex vc-direction--column ">
                 <i
                   class="iconfont icon-jieping1 vv-text--ali vc-margin__sm--bm"
