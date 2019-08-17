@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-17 18:26:41
+ * @LastEditTime: 2019-08-17 20:46:18
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -144,30 +144,10 @@ export default {
                 </p>
 
                 <template v-if="payType == 3">
-                  <div>
+                  <div v-if="!payRemark || payRemark.length === 4">
                     <span class="vc-text--bold vc-text--danger vc-text--xl">
-                      请勿修改付款金额
+                      请勿修改付款信息
                     </span>
-                  </div>
-                  <div v-if="payRemark.length === 4">
-                    <p class="">
-                      <span class="vc-text--bold vc-text--danger vc-text--xl">
-                        必须在转账备注中添加付款码
-                      </span>
-                    </p>
-                    <p>
-                      <span
-                        class="vc-text--bold vc-text--xl"
-                        v-clipboard="payRemark"
-                        @success="handleSuccess"
-                        @error="handleError"
-                      >
-                        付款码：
-                        <span class="vc-text--bold vc-text--xl-xx">{{
-                          payRemark
-                        }}</span>
-                      </span>
-                    </p>
                   </div>
                 </template>
                 <template v-if="payType == 6 && payRemark.length !== 6">
