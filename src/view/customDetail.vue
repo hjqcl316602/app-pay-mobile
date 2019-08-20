@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-16 10:33:38
+ * @LastEditTime: 2019-08-20 18:13:48
  * @LastEditors: Please set LastEditors
  -->
 <script>
@@ -257,10 +257,26 @@ export default {
       };
 
       this.chats.push(sendParams);
+      this.setMessageTimer();
 
       this.scrollToBottom();
 
       this._socket.send("/app/message/nologin", {}, JSON.stringify(sendParams));
+    },
+
+    setMessageTimer() {
+      this.clearMessageTimer();
+      this.messageTimer = setTimeout(() => {
+        this.chats.push({
+          content:
+            "亲，感谢的您耐心的等待，您的问题已收到，我们正在为您处理，谢谢",
+          type: 0,
+          uidType: 2
+        });
+      }, 1000 * 60);
+    },
+    clearMessageTimer() {
+      clearTimeout(this.messageTimer);
     },
 
     /**

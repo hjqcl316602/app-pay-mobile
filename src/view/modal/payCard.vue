@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-17 14:18:00
+ * @LastEditTime: 2019-08-20 10:54:02
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -40,7 +40,7 @@ export default {
     };
   },
   mounted() {
-    this.initialize(); 
+    this.initialize();
   },
   methods: {
     initialize() {
@@ -51,7 +51,7 @@ export default {
       this.params.bankMark = qrs[3] || "";
       this.params.money = (Number(this.fee) / 100).toString();
     },
-    
+
     handleSuccess(e) {
       this.$message.success("复制成功！" + e.text);
     },
@@ -101,9 +101,17 @@ export default {
                   <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
                   <!-- <span style="font-size: 1rem;">{{ fee | strMoney }}</span> -->
                 </p>
-                <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                  请确保付款金额与该金额一致
-                </p>
+                <template v-if="payType == 1">
+                  <p class=" vc-text--danger vc-text--bold vc-text--xl">
+                    请确保付款金额与该金额一致
+                  </p>
+                </template>
+                <template v-if="payType == 5">
+                  <p class=" vc-text--danger vc-text--bold vc-text--xl">
+                    请勿修改转账信息
+                  </p>
+                </template>
+
                 <div v-if="payRemark">
                   <p class=" ">
                     <span class="vc-text--bold vc-text--danger   vc-text--xl">

@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-17 17:49:36
+ * @LastEditTime: 2019-08-20 12:00:43
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -24,14 +24,12 @@ const APPID_TO_ALIPAY = "20000067";
 /**
  * 跳转到支付宝内部，指定的路径和参数的传递
  */
-function getAlipayUrl(path, params) {
+function getAlipayUrl(path) {
   let query = new Queryer();
   let urler = new Urler();
   let href = window.location.href;
   let index = href.indexOf("#");
-  let url = urler.encodeURIComponent(
-    href.substring(0, index + 1) + path + query.stringify(params)
-  );
+  let url = urler.encodeURIComponent(href.substring(0, index + 1) + path);
   return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
 }
 export default {
@@ -176,16 +174,15 @@ export default {
           query: { orderId: this.params.orderId }
         });
       } else if (type === "alipay") {
-        if (this.params.payType == 1 || this.params.payType == 5) {
-          window.location.href = "alipays://";
-        }
-        if (this.params.payType == 6) {
-          // this.$router.push(
-          //   `/alipay/${this.params.token}/${this.params.payType}`
-          // );
-          // window.location.href = getAlipayUrl(
-          //   `/alipay/${this.params.token}/${this.params.payType}`
-          // );
+        let test = false;
+        if (test) {
+          this.$router.push(
+            `/alipay/${this.params.token}/${this.params.payType}`
+          );
+        } else {
+          window.location.href = getAlipayUrl(
+            `/alipay/${this.params.token}/${this.params.payType}`
+          );
         }
       } else if (type === "wx") {
         window.location.href = "weixin://";
@@ -232,7 +229,7 @@ export default {
       <div
         class="vv-side-item vv-text--ali"
         @click="selectSide('alipay')"
-        v-if="params.payType == 5 || params.payType == 1"
+        v-if="params.payType == 5 || params.payType == 6 || params.payType == 3"
       >
         <span>支付宝</span>
         <i class="iconfont icon-jiantou" style="font-size:16px"></i>

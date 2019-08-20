@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-17 20:46:18
+ * @LastEditTime: 2019-08-20 10:49:48
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -150,7 +150,14 @@ export default {
                     </span>
                   </div>
                 </template>
-                <template v-if="payType == 6 && payRemark.length !== 6">
+                <template v-if="payType == 6">
+                  <div>
+                    <span class="vc-text--bold vc-text--danger vc-text--xl"
+                      >请勿修改转账信息</span
+                    >
+                  </div>
+                </template>
+                <template v-if="false">
                   <div>
                     <span class="vc-text--bold vc-text--danger vc-text--xl">
                       请确保付款金额与该金额一致
