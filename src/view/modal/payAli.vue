@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-20 10:49:48
+ * @LastEditTime: 2019-08-26 16:39:11
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -44,10 +44,7 @@ export default {
   methods: {
     initialize() {
       let qrs = this.qr ? this.qr.split(",") : [];
-      this.params.qr = qrs[0] || "";
-      if (this.payType === 3) {
-        this.params.realName = qrs[1] || "";
-      }
+      this.params.realName = qrs[0] || "";
     },
     goAplipay(isAlipay = true, quick = false) {
       // if (isAlipay) {
@@ -104,6 +101,7 @@ export default {
   props: {
     backTime: { type: [Number, String] },
     qr: { type: String },
+    url: { type: String },
     sn: { type: String },
     fee: { type: [String, Number] },
     payRemark: { type: String },
@@ -190,10 +188,10 @@ export default {
                   <div
                     class="vp-ratio__inner vp-bg vp-br  vp-pos"
                     ref="codeBox"
-                    v-if="params.qr"
+                    v-if="url"
                   >
                     <qriously
-                      :value="params.qr"
+                      :value="url"
                       :size="payCode.size"
                       :level="payCode.level"
                       :background="payCode.background"
@@ -221,7 +219,7 @@ export default {
                 @success="handleSuccess"
                 @error="handleError"
                 class=""
-                v-if="!!params.realName"
+                v-if="!!params.realName && payType == 6"
               >
                 <div class="vc-text--center">
                   <span
@@ -229,10 +227,8 @@ export default {
                     >{{ params.realName }}</span
                   >
                 </div>
-                <div class="vc-text--center">
-                  <span class="vc-text--gray vc-text--mi"
-                    >(收款人真实姓名)</span
-                  >
+                <div class="vc-text--center" v-if="false">
+                  <span class="vc-text--gray vc-text--mi">()</span>
                 </div>
               </div>
 

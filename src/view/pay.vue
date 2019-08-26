@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-20 12:00:43
+ * @LastEditTime: 2019-08-26 16:51:55
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -47,6 +47,7 @@ export default {
         sn: "",
         timeLimit: 0,
         qr: "",
+        url: "",
         needRemark: "",
         payRemark: "",
         orderId: ""
@@ -223,7 +224,7 @@ export default {
         @click="selectSide('wx')"
         v-if="params.payType == 2"
       >
-        <span>微信</span>
+        <span class="vc-text--bold">微信</span>
         <i class="iconfont icon-jiantou" style="font-size:16px"></i>
       </div>
       <div
@@ -231,18 +232,18 @@ export default {
         @click="selectSide('alipay')"
         v-if="params.payType == 5 || params.payType == 6 || params.payType == 3"
       >
-        <span>支付宝</span>
+        <span class="vc-text--bold">支付宝</span>
         <i class="iconfont icon-jiantou" style="font-size:16px"></i>
       </div>
       <div class="vv-side-item vc-text--danger" @click="selectSide('cancel')">
-        <span>取消</span>
+        <span class="vc-text--bold">取消</span>
         <i class="iconfont icon-quxiao" style="font-size:16px"></i>
       </div>
       <div
         class="vv-side-item vc-text--warning"
         @click="selectSide('customer')"
       >
-        <span>客服</span>
+        <span class="vc-text--bold">客服</span>
         <i class="iconfont icon-customer" style="font-size:16px"></i>
       </div>
     </div>
@@ -271,6 +272,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :url="params.url"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
         :payType="params.payType"
         :token="params.token"

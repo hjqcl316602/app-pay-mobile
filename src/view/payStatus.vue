@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-15 17:34:18
+ * @LastEditTime: 2019-08-26 16:55:40
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -59,7 +59,7 @@ export default {
   <div class="vv-page">
     <div class="vv-side">
       <div class="vv-side-item vc-text--warning" @click="toCustomer">
-        <span>客服</span>
+        <span class="vc-text--bold">客服</span>
         <i class="iconfont icon-customer" style="font-size:16px"></i>
       </div>
     </div>

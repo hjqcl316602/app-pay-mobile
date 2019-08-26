@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-20 18:13:48
+ * @LastEditTime: 2019-08-20 18:38:15
  * @LastEditors: Please set LastEditors
  -->
 <script>
@@ -59,7 +59,8 @@ export default {
         push: {
           loading: false,
           finished: true
-        }
+        },
+        number: 0
       }
     };
   },
@@ -266,13 +267,16 @@ export default {
 
     setMessageTimer() {
       this.clearMessageTimer();
+      if (this.chat.number === 1) return false;
       this.messageTimer = setTimeout(() => {
+        this.chat.number++;
         this.chats.push({
           content:
             "亲，感谢的您耐心的等待，您的问题已收到，我们正在为您处理，谢谢",
           type: 0,
           uidType: 2
         });
+        this.scrollToBottom();
       }, 1000 * 60);
     },
     clearMessageTimer() {
@@ -331,6 +335,7 @@ export default {
   beforeDestroy() {
     this.closeSocket();
     document.body.removeEventListener("click", this._close);
+    this.clearMessageTimer();
   }
 };
 </script>
