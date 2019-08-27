@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-26 16:51:55
+ * @LastEditTime: 2019-08-27 11:36:03
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -47,7 +47,6 @@ export default {
         sn: "",
         timeLimit: 0,
         qr: "",
-        url: "",
         needRemark: "",
         payRemark: "",
         orderId: ""
@@ -230,7 +229,7 @@ export default {
       <div
         class="vv-side-item vv-text--ali"
         @click="selectSide('alipay')"
-        v-if="params.payType == 5 || params.payType == 6 || params.payType == 3"
+        v-if="params.payType == 5 || params.payType == 6"
       >
         <span class="vc-text--bold">支付宝</span>
         <i class="iconfont icon-jiantou" style="font-size:16px"></i>
@@ -272,6 +271,7 @@ export default {
         :backTime="params.timeLimit"
         :sn="params.sn"
         :fee="params.fee"
+        :alipayRealName="params.alipayRealName"
         :url="params.url"
         :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
         :payType="params.payType"

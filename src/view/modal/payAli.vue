@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-26 16:39:11
+ * @LastEditTime: 2019-08-27 11:36:17
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -18,13 +18,7 @@ export default {
 
   data() {
     return {
-      params: {
-        qr: "",
-        realName: "",
-        userId: "",
-        memo: "",
-        money: ""
-      },
+      params: {},
       payCode: {
         value: "",
         size: 300,
@@ -37,15 +31,10 @@ export default {
   },
 
   mounted() {
-    this.initialize();
     this.setCode();
     //this.goAplipay();
   },
   methods: {
-    initialize() {
-      let qrs = this.qr ? this.qr.split(",") : [];
-      this.params.realName = qrs[0] || "";
-    },
     goAplipay(isAlipay = true, quick = false) {
       // if (isAlipay) {
       //   if (quick) {
@@ -101,12 +90,12 @@ export default {
   props: {
     backTime: { type: [Number, String] },
     qr: { type: String },
-    url: { type: String },
     sn: { type: String },
     fee: { type: [String, Number] },
     payRemark: { type: String },
     payType: { type: [String, Number] },
-    token: { type: [String] }
+    token: { type: [String] },
+    alipayRealName: { type: String }
   }
 };
 </script>
@@ -121,7 +110,7 @@ export default {
     </div>
     <div
       class="vc-fluid--h-min vc-flex--center vv-bg--ali  "
-      style="padding: 20px 20px 70px"
+      style="padding: 20px 20px 80px"
     >
       <div class="vv-pay__body--outer" style="">
         <div class="vv-pay__body--inner ali vp-bg">
@@ -141,7 +130,7 @@ export default {
                   ></FormatMoney> -->
                 </p>
 
-                <template v-if="payType == 3">
+                <template v-if="false">
                   <div v-if="!payRemark || payRemark.length === 4">
                     <span class="vc-text--bold vc-text--danger vc-text--xl">
                       请勿修改付款信息
@@ -155,8 +144,8 @@ export default {
                     >
                   </div>
                 </template>
-                <template v-if="false">
-                  <div>
+                <template v-if="payType == 3">
+                  <div v-if="payRemark.length != 6">
                     <span class="vc-text--bold vc-text--danger vc-text--xl">
                       请确保付款金额与该金额一致
                     </span>
@@ -182,16 +171,32 @@ export default {
                     </p>
                   </div>
                 </template>
+
+                <template v-if="payType == 6">
+                  <div
+                    v-clipboard="alipayRealName"
+                    @success="handleSuccess"
+                    @error="handleError"
+                    class="vc-padding--tp"
+                  >
+                    <div class="vc-text--center">
+                      <span
+                        class="vc-text--bold vc-text--xl-xx vc-text--baseline--md"
+                        >{{ alipayRealName }}</span
+                      >
+                    </div>
+                  </div>
+                </template>
               </div>
               <div class="vp-ratio">
                 <div class="vp-ratio__outer" data-ratio="100%">
                   <div
                     class="vp-ratio__inner vp-bg vp-br  vp-pos"
                     ref="codeBox"
-                    v-if="url"
+                    v-if="qr"
                   >
                     <qriously
-                      :value="url"
+                      :value="qr"
                       :size="payCode.size"
                       :level="payCode.level"
                       :background="payCode.background"
@@ -214,116 +219,57 @@ export default {
                   </div>
                 </div>
               </div>
-              <div
-                v-clipboard="params.realName"
-                @success="handleSuccess"
-                @error="handleError"
-                class=""
-                v-if="!!params.realName && payType == 6"
-              >
-                <div class="vc-text--center">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    >{{ params.realName }}</span
-                  >
-                </div>
-                <div class="vc-text--center" v-if="false">
-                  <span class="vc-text--gray vc-text--mi">()</span>
-                </div>
-              </div>
-
-              <div
-                v-clipboard="payRemark"
-                @success="handleSuccess"
-                @error="handleError"
-                class=""
-                v-if="false"
-              >
-                <div class="vc-text--center">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    >{{ payRemark }}</span
-                  >
-                </div>
-                <div class="vc-text--center">
-                  <span class="vc-text--gray vc-text--mi"
-                    >(转账时请务必添加上该备注，否则充值不成功，轻触可复制)</span
-                  >
-                </div>
-              </div>
             </div>
           </div>
 
           <div class=" vc-padding">
-            <div v-if="false">
-              <p
-                class="vc-text--bold vc-text--danger vc-text--baseline--md vc-text--sm"
-              >
-                支付方式：
-              </p>
-              <p
-                class="vc-text--danger vc-text--baseline--md vc-text--sm"
-                style="text-indent:20px"
-              >
-                ①单击下方支付宝按钮，进入支付宝app，长按页面中二维码识别支付
-              </p>
-              <p
-                class="vc-text--danger vc-text--baseline--md vc-text--sm"
-                style="text-indent:20px"
-              >
-                ②如若不能直接进入支付宝app，则将二维码截屏并保存至本地相册，打开支付宝选择扫一扫，从本地相册选取截屏二维码
-              </p>
-            </div>
-            <div class="vc-flex" v-if="true">
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-jieping1 vv-text--ali vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray"
-                  >将二维码截屏并保存至本地相册
-                </span>
+            <template v-if="payType == 6">
+              <div>
+                <div class=" vc-text--center vc-flex vc-direction--column ">
+                  <span class="vc-text--sm vc-text--gray"
+                    >单击下方按钮【支付宝】进入支付宝转账
+                  </span>
+                </div>
               </div>
-              <div class="vc-padding__sm--ad vc-padding__lg--tp">
-                <i class="iconfont icon-jiantou vc-text--sm vv-text--ali"></i>
+            </template>
+            <template v-if="payType == 3">
+              <div class="vc-flex">
+                <div class=" vc-text--center vc-flex vc-direction--column ">
+                  <i
+                    class="iconfont icon-jieping1 vv-text--ali vc-margin__sm--bm"
+                  ></i>
+                  <span class="vc-text--sm vc-text--gray"
+                    >将二维码截屏并保存至本地相册
+                  </span>
+                </div>
+                <div class="vc-padding__sm--ad vc-padding__lg--tp">
+                  <i class="iconfont icon-jiantou vc-text--sm vv-text--ali"></i>
+                </div>
+                <div class=" vc-text--center vc-flex vc-direction--column ">
+                  <i
+                    class="iconfont icon-changyonglogo30 vv-text--ali vc-margin__sm--bm"
+                  ></i>
+
+                  <span class="vc-text--sm vc-text--gray">
+                    打开支付宝选择扫一扫
+                  </span>
+                </div>
+                <div class="vc-padding__sm--ad vc-padding__lg--tp">
+                  <i class="iconfont icon-jiantou vc-text--sm vv-text--ali"></i>
+                </div>
+                <div class=" vc-text--center vc-flex vc-direction--column ">
+                  <i
+                    class="iconfont icon-saoyisao vv-text--ali vc-margin__sm--bm"
+                  ></i>
+                  <span class="vc-text--sm vc-text--gray"
+                    >从本地相册选取截屏二维码</span
+                  >
+                </div>
               </div>
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-changyonglogo30 vv-text--ali vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray">
-                  打开支付宝选择扫一扫
-                </span>
-              </div>
-              <div class="vc-padding__sm--ad vc-padding__lg--tp">
-                <i class="iconfont icon-jiantou vc-text--sm vv-text--ali"></i>
-              </div>
-              <div class=" vc-text--center vc-flex vc-direction--column ">
-                <i
-                  class="iconfont icon-saoyisao vv-text--ali vc-margin__sm--bm"
-                ></i>
-                <span class="vc-text--sm vc-text--gray"
-                  >从本地相册选取截屏二维码</span
-                >
-              </div>
-            </div>
+            </template>
           </div>
         </div>
-        <!-- <div class="vc-margin__lg--tp">
-          <div class="vc-text--center">
-            <span class="vc-text--white-light  ">
-              过期时间
-            </span>
-          </div>
-          <div class="vc-text--white vc-text--bold vc-text--center vc-margin--tp">
-            <span class="vc-text--white vc-text--bold  ">{{ backTime | strTime }}</span>
-          </div>
-        </div> -->
         <div class="vc-margin__lg--tp">
-          <!-- <div class="vc-text--center">
-            <span class="vc-text--white-light  ">
-              过期时间
-            </span>
-          </div> -->
           <div
             class="vc-text--white vc-text--bold vc-text--center vc-margin--tp"
           >

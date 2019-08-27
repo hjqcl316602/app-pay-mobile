@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-26 16:55:51
+ * @LastEditTime: 2019-08-27 09:39:37
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -122,10 +122,10 @@ export default {
         <i class="iconfont icon-customer" style="font-size:28px"></i>
       </div>
     </div>
-    <div class="vc-fluid--h-min vp-bg " style="padding: 20px 20px 70px">
+    <div class="vc-fluid--h-min vp-bg " style="padding: 20px 20px 80px">
       <div class="vp-ratio ">
         <div class="vp-ratio__outer" data-ratio="75%">
-          <div class="vp-ratio__inner  vc-flex--center">
+          <div class="vp-ratio__inner vc-flex--center">
             <div v-if="params.status === 0">
               <div>
                 <img

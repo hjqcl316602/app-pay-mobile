@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-07-29 10:02:13
- * @LastEditTime: 2019-08-20 10:54:02
+ * @LastEditTime: 2019-08-27 09:37:19
  * @LastEditors: Please set LastEditors
  -->
 <script type="text/ecmascript-6">
@@ -80,7 +80,7 @@ export default {
     </div>
     <div
       class="vc-fluid--h-min vc-flex--center vv-bg--card  "
-      style="padding: 20px 20px 70px"
+      style="padding: 20px 20px 80px"
     >
       <div class="vv-pay__body--outer">
         <div class="vv-pay__body--inner  card vp-bg vp-pos">
