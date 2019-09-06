@@ -241,6 +241,7 @@ export default {
       <div
         class="vv-side-item vc-text--warning"
         @click="selectSide('customer')"
+        v-if="false"
       >
         <span class="vc-text--bold">客服</span>
         <i class="iconfont icon-customer" style="font-size:16px"></i>
