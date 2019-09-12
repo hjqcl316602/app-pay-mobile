@@ -5,7 +5,7 @@
  * @LastEditTime: 2019-08-15 16:04:58
  * @LastEditors: Please set LastEditors
  -->
-<script >
+<script>
 import Vue from "vue";
 
 import Radio from "../components/Radio";
@@ -19,7 +19,6 @@ import {
 } from "../request";
 import { Checker, funer, Hexer } from "store-es";
 import { Accordion, Input, Upload, Confirm } from "store-vue-ui";
-console.log(Confirm);
 Vue.use(Accordion)
   .use(Accordion.Item)
   .use(Input)
@@ -49,7 +48,7 @@ export default {
         memId: "",
         subMemId: "",
         mobile: "",
-        appId:''
+        appId: ""
       },
       wx: {
         wechat: "",
@@ -193,7 +192,7 @@ export default {
           return;
         }
         this.union.unionpayCodeUrl = res["url"];
-        this.union.unionpayUrl = res["qr"]
+        this.union.unionpayUrl = res["qr"];
       }
     },
 
@@ -311,7 +310,10 @@ export default {
         localStorage.setItem("app/draw/type", this.params.type);
         this.$router.replace({
           name: "DrawStatus",
-          params: { accessToken: this.params.accessToken , appId : this.params.appId }
+          params: {
+            accessToken: this.params.accessToken,
+            appId: this.params.appId
+          }
         });
       })();
     },
@@ -416,7 +418,7 @@ export default {
             </div>
           </div>
         </div>
-      </template> 
+      </template>
       <template v-if="params.type == 2">
         <div class="vc-padding">
           <div class="vc-flex vc-margin--bm">
@@ -1091,5 +1093,4 @@ export default {
     </div>
   </div>
 </template>
-<style scoped>
-</style>
+<style scoped></style>

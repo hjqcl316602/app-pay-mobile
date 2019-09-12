@@ -5,13 +5,15 @@
  * @LastEditTime: 2019-08-27 09:37:19
  * @LastEditors: Please set LastEditors
  -->
-<script type="text/ecmascript-6">
+<script>
 import Vue from "vue";
 import VueClipboards from "vue-clipboards";
 import { Queryer, Urler } from "store-es";
+
 Vue.use(VueClipboards);
 
 const APPID_TO_ALIPAY = "20000067";
+
 /**
  * 跳转到支付宝内部，指定的路径和参数的传递
  */
@@ -25,6 +27,7 @@ function getAlipayUrl(path, params) {
   );
   return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
 }
+
 export default {
   name: "PagePayCard",
   data() {
@@ -36,7 +39,8 @@ export default {
         bankMark: "",
         bankName: "",
         money: ""
-      }
+      },
+      message: []
     };
   },
   mounted() {
@@ -50,6 +54,21 @@ export default {
       this.params.bankAccount = qrs[2] || "";
       this.params.bankMark = qrs[3] || "";
       this.params.money = (Number(this.fee) / 100).toString();
+      this.getMessage();
+    },
+    getMessage() {
+      if (Number(this.payType) === 1) {
+        this.message.push("请确保付款金额与订单金额一致");
+      }
+      if (Number(this.payType) === 5) {
+        this.message.push("请勿修改转账信息");
+      }
+      this.message.push("同一订单请勿重复支付");
+      this.message.push("超时请勿支付");
+      if (this.payRemark) {
+        this.message.push("必须在转账备注中添加付款码");
+        this.message.push("付款码:" + this.payRemark);
+      }
     },
 
     handleSuccess(e) {
@@ -70,175 +89,223 @@ export default {
 };
 </script>
 <template>
-  <div class="vv-page">
-    <div class="vc-flex--center vv-mask" v-if="backTime === 0">
-      <div>
-        <div class="vc-text--center vc-text--white" style="font-size: 40px">
-          已过期
-        </div>
-      </div>
-    </div>
-    <div
-      class="vc-fluid--h-min vc-flex--center vv-bg--card  "
-      style="padding: 20px 20px 80px"
-    >
-      <div class="vv-pay__body--outer">
-        <div class="vv-pay__body--inner  card vp-bg vp-pos">
-          <div
-            class="vv-pay__content card vc-padding--ad vc-padding__md-lg--ud"
-          >
-            <div class="  vc-text--center vc-margin--bm">
-              <span class="vc-text--gray ">订单号:{{ sn }}</span>
-            </div>
-            <div class=" " style="">
-              <div class="vc-text--center   vc-text--center vc-margin__lg--bm">
-                <p
-                  v-clipboard="Number(fee) / 100"
-                  @success="handleSuccess"
-                  @error="handleError"
-                >
-                  <span style="font-size: 40px;">￥</span>
-                  <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
-                  <!-- <span style="font-size: 1rem;">{{ fee | strMoney }}</span> -->
-                </p>
-                <template v-if="payType == 1">
-                  <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                    请确保付款金额与该金额一致
-                  </p>
-                </template>
-                <template v-if="payType == 5">
-                  <p class=" vc-text--danger vc-text--bold vc-text--xl">
-                    请勿修改转账信息
-                  </p>
-                </template>
-
-                <div v-if="payRemark">
-                  <p class=" ">
-                    <span class="vc-text--bold vc-text--danger   vc-text--xl">
-                      必须在转账备注中添加付款码
-                    </span>
-                  </p>
-                  <p>
-                    <span
-                      class="vc-text--bold vc-text--xl"
-                      v-clipboard="payRemark"
-                      @success="handleSuccess"
-                      @error="handleError"
-                    >
-                      付款码：
-                      <span class="vc-text--bold vc-text--xl-xx">{{
-                        payRemark
-                      }}</span>
-                    </span>
-                  </p>
-                </div>
+  <div class="vv-page-wrap vv-bg--card">
+    <div class="vv-page-body">
+      <div class="vv-page-content is-card">
+        <div class="vv-page-content--inner is-card">
+          <div class="vc-text--center vc-margin--bm">
+            <template v-if="payType == 1">
+              <div>
+                <span class="vc-text--bold vc-text--danger vc-text--lg">
+                  请确保付款金额与订单金额一致
+                </span>
               </div>
-
-              <div
-                v-clipboard="params.cardNo"
-                @success="handleSuccess"
-                @error="handleError"
-                class="vc-margin__lg--bm vc-flex"
-              >
-                <div class="vc-text--right vc-padding--rt" style="width:30%">
-                  <span
-                    class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
-                    >卡号</span
-                  >
-                </div>
-                <div class="">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    >{{ params.cardNo }}</span
-                  >
-                </div>
+            </template>
+            <template v-if="payType == 5">
+              <div>
+                <span class="vc-text--bold vc-text--danger vc-text--lg">
+                  请勿修改转账信息
+                </span>
               </div>
-
-              <div
-                v-clipboard="params.bankAccount"
-                @success="handleSuccess"
-                @error="handleError"
-                class="vc-margin__lg--bm vc-flex"
-              >
-                <div class="vc-text--right vc-padding--rt" style="width:30%">
-                  <span
-                    class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
-                    >户主</span
-                  >
-                </div>
-                <div class="">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    >{{ params.bankAccount }}</span
-                  >
-                </div>
-              </div>
-
-              <div
-                v-clipboard="params.bankName"
-                @success="handleSuccess"
-                @error="handleError"
-                class=" vc-flex"
-              >
-                <div class="vc-text--right vc-padding--rt" style="width:30%">
-                  <span
-                    class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
-                    >开户行</span
-                  >
-                </div>
-                <div class="">
-                  <span
-                    class="vc-text--bold vc-text--lg vc-text--baseline--md"
-                    >{{ params.bankName }}</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="vc-padding--ad vc-padding__md-lg--ud vc-text--center  ">
+            </template>
             <div>
-              <p class="vc-margin--bm">
-                <span class="vc-text--lg vc-text--bold vv-text--card"
-                  >通过银行卡转账支付</span
+              <span class="vc-text--bold vc-text--danger vc-text--lg"
+                >同一订单请勿重复支付</span
+              >
+            </div>
+            <div>
+              <span class="vc-text--bold vc-text--danger vc-text--lg"
+                >超时请勿支付</span
+              >
+            </div>
+          </div>
+          <div class="vc-margin--bm">
+            <div
+              v-clipboard="params.cardNo"
+              @success="handleSuccess"
+              @error="handleError"
+              class="vc-margin__lg--bm vc-flex"
+            >
+              <div class="vc-text--right vc-padding--rt" style="width:30%">
+                <span
+                  class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
                 >
-              </p>
-              <p>
-                <span class="vc-text--gray"
-                  >轻触卡号、开户行、户主均可进行复制</span
+                  卡号
+                </span>
+              </div>
+              <div class="">
+                <span class="vc-text--bold vc-text--lg vc-text--baseline--md">
+                  {{ params.cardNo }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              v-clipboard="params.bankAccount"
+              @success="handleSuccess"
+              @error="handleError"
+              class="vc-margin__lg--bm vc-flex"
+            >
+              <div class="vc-text--right vc-padding--rt" style="width:30%">
+                <span
+                  class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
                 >
-              </p>
+                  户主
+                </span>
+              </div>
+              <div class="">
+                <span class="vc-text--bold vc-text--lg vc-text--baseline--md">
+                  {{ params.bankAccount }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              v-clipboard="params.bankName"
+              @success="handleSuccess"
+              @error="handleError"
+              class=" vc-flex"
+            >
+              <div class="vc-text--right vc-padding--rt" style="width:30%">
+                <span
+                  class="vc-text--bold vc-text--light vc-text--lg vc-text--baseline--md"
+                >
+                  开户行
+                </span>
+              </div>
+              <div class="">
+                <span class="vc-text--bold vc-text--lg vc-text--baseline--md">
+                  {{ params.bankName }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- <div class="vc-margin__lg--tp">
-          <div class="vc-text--center">
-              <span class="vc-text--white-light  ">
-                过期时间
-              </span>
-          </div>
-          <div class="vc-text--white vc-text--bold vc-text--center vc-margin--tp">
-            <span class="vc-text--white vc-text--bold  ">{{ backTime | strTime }}</span>
-          </div>
-        </div> -->
-
-        <div class="vc-margin__lg--tp">
-          <!-- <div class="vc-text--center">
-            <span class="vc-text--white-light  ">
-              过期时间
-            </span>
-          </div> -->
-          <div
-            class="vc-text--white vc-text--bold vc-text--center vc-margin--tp"
-          >
-            <span class="vc-text--white vc-text--bold  ">
-              <span class="vc-text--white-light">倒计时：</span>
-              {{ backTime | strTime }}
+        <div class="vc-text--center vc-padding">
+          <div>
+            <span class="vc-text--gray">
+              轻触卡号、开户行、户主均可进行复制
             </span>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!--<div class="vv-page-wrap vv-bg&#45;&#45;card  " v-if="false">
+  <div class="vv-pay__body&#45;&#45;outer">
+    &lt;!&ndash;订单号&ndash;&gt;
+    <template v-if="false">
+      <div class="  vc-text&#45;&#45;center vc-margin&#45;&#45;bm">
+        <span class="vc-text&#45;&#45;white">订单号:{{ sn }}</span>
+      </div>
+    </template>
+
+    <div class="vv-pay__body&#45;&#45;inner  card vp-bg vp-pos">
+      <div class="vv-pay__content card vc-padding">
+        &lt;!&ndash;金额&ndash;&gt;
+        <div class="vc-text&#45;&#45;center vc-margin&#45;&#45;bm" v-if="false">
+          <span style="font-size: 40px;">￥</span>
+          <span style="font-size: 1rem;">{{ fee | strMoney }}</span>
+        </div>
+        &lt;!&ndash;信息&ndash;&gt;
+        <div class="vc-margin&#45;&#45;bm vc-text&#45;&#45;center">
+          <p v-for="(item, index) in message">
+            <span class="vc-text&#45;&#45;danger vc-text&#45;&#45;bold vc-text&#45;&#45;lg">
+              {{ item }}
+            </span>
+          </p>
+        </div>
+
+        &lt;!&ndash;充值信息&ndash;&gt;
+        <div>
+          <div
+            v-clipboard="params.cardNo"
+            @success="handleSuccess"
+            @error="handleError"
+            class="vc-margin__lg&#45;&#45;bm vc-flex"
+          >
+            <div class="vc-text&#45;&#45;right vc-padding&#45;&#45;rt" style="width:30%">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;light vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >卡号</span
+              >
+            </div>
+            <div class="">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >{{ params.cardNo }}</span
+              >
+            </div>
+          </div>
+
+          <div
+            v-clipboard="params.bankAccount"
+            @success="handleSuccess"
+            @error="handleError"
+            class="vc-margin__lg&#45;&#45;bm vc-flex"
+          >
+            <div class="vc-text&#45;&#45;right vc-padding&#45;&#45;rt" style="width:30%">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;light vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >户主</span
+              >
+            </div>
+            <div class="">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >{{ params.bankAccount }}</span
+              >
+            </div>
+          </div>
+
+          <div
+            v-clipboard="params.bankName"
+            @success="handleSuccess"
+            @error="handleError"
+            class=" vc-flex"
+          >
+            <div class="vc-text&#45;&#45;right vc-padding&#45;&#45;rt" style="width:30%">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;light vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >开户行</span
+              >
+            </div>
+            <div class="">
+              <span
+                class="vc-text&#45;&#45;bold vc-text&#45;&#45;lg vc-text&#45;&#45;baseline&#45;&#45;md"
+                >{{ params.bankName }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vc-padding&#45;&#45;ad vc-padding__md-lg&#45;&#45;ud vc-text&#45;&#45;center  ">
+        <div>
+          <p class="vc-margin&#45;&#45;bm">
+            <span class="vc-text&#45;&#45;lg vc-text&#45;&#45;bold vv-text&#45;&#45;card"
+              >通过银行卡转账支付</span
+            >
+          </p>
+          <p>
+            <span class="vc-text&#45;&#45;gray">
+              轻触卡号、开户行、户主均可进行复制
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="vc-margin__lg&#45;&#45;tp" v-if="false">
+      <div
+        class="vc-text&#45;&#45;white vc-text&#45;&#45;bold vc-text&#45;&#45;center vc-margin&#45;&#45;tp"
+      >
+        <span class="vc-text&#45;&#45;white vc-text&#45;&#45;bold  ">
+          <span class="vc-text&#45;&#45;white-light">倒计时：</span>
+          {{ backTime | strTime }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>-->
 </template>
 <style scoped></style>

@@ -211,13 +211,84 @@ export default {
 };
 </script>
 <template>
-  <div v-if="isShow">
+  <div class="vv-page is-cover-hor is-side-header is-side-footer">
     <vui-confirm v-model="cancel.popup" title="信息确认" @ok="cancelOrder">
       <div class="vc-padding vc-text--center">
         <span class="vc-text--danger">是否确定取消该充值订单?</span>
       </div>
     </vui-confirm>
+
+    <div class="vc-flex--center vv-mask" v-if="params.timeLimit == 0">
+      <div>
+        <div class="vc-text--center vc-text--white" style="font-size: 40px">
+          已过期
+        </div>
+      </div>
+    </div>
+
+    <div class="vv-side-header is-title vc-text--center">
+      <p>
+        <span class="vc-text--light">{{ params.sn }}</span>
+      </p>
+      <p>
+        <span style="font-size: 24px;">￥ </span>
+        <span style="font-size: 40px;">{{ params.fee | strMoney }}</span>
+      </p>
+    </div>
+    <template>
+      <template v-if="params.payType == 1 || params.payType == 5">
+        <payCard
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+          :payType="params.payType"
+          ref="payCard"
+        ></payCard>
+      </template>
+      <template v-if="params.payType == 2">
+        <payWx
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+        ></payWx>
+      </template>
+      <template v-if="params.payType == 3 || params.payType == 6">
+        <payAli
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :alipayRealName="params.alipayRealName"
+          :url="params.url"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+          :payType="params.payType"
+          :token="params.token"
+          ref="payAli"
+        ></payAli>
+      </template>
+      <template v-if="params.payType == 4">
+        <payUnion
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+        ></payUnion>
+      </template>
+    </template>
     <div class="vv-side">
+      <div class="vv-side-item is-grow ">
+        <span class="vc-text--gray">
+          过期倒计时：
+        </span>
+        <span class="vc-text--danger vc-text--bold">
+          {{ params.timeLimit | strTime }}
+        </span>
+      </div>
       <div
         class="vv-side-item vv-text--wx"
         @click="selectSide('wx')"
@@ -241,73 +312,129 @@ export default {
       <div
         class="vv-side-item vc-text--warning"
         @click="selectSide('customer')"
-        v-if="false"
+        v-if="true"
       >
         <span class="vc-text--bold">客服</span>
         <i class="iconfont icon-customer" style="font-size:16px"></i>
       </div>
     </div>
 
-    <payCard
-      v-if="params.payType == 1 || params.payType == 5"
-      :qr="params.qr"
-      :backTime="params.timeLimit"
-      :sn="params.sn"
-      :fee="params.fee"
-      :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-      :payType="params.payType"
-      ref="payCard"
-    ></payCard>
-    <payWx
-      v-if="params.payType == 2"
-      :qr="params.qr"
-      :backTime="params.timeLimit"
-      :sn="params.sn"
-      :fee="params.fee"
-      :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-    ></payWx>
-    <template v-if="params.payType == 3 || params.payType == 6">
-      <payAli
-        :qr="params.qr"
-        :backTime="params.timeLimit"
-        :sn="params.sn"
-        :fee="params.fee"
-        :alipayRealName="params.alipayRealName"
-        :url="params.url"
-        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-        :payType="params.payType"
-        :token="params.token"
-        ref="payAli"
-      ></payAli>
-    </template>
-    <template v-if="params.payType == 4">
-      <payUnion
-        :qr="params.qr"
-        :backTime="params.timeLimit"
-        :sn="params.sn"
-        :fee="params.fee"
-        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-      ></payUnion>
-    </template>
-    <!-- <template v-if="params.payType == 5 && isShow">
-      <payCardQuick
-        :qr="params.qr"
-        :backTime="params.timeLimit"
-        :sn="params.sn"
-        :fee="params.fee"
-        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-      ></payCardQuick>
-    </template> -->
-    <!-- <template v-if="params.payType == 6 && isShow">
-      <payAliQuick
-        :qr="params.qr"
-        :backTime="params.timeLimit"
-        :sn="params.sn"
-        :fee="params.fee"
-        :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
-      ></payAliQuick>
-    </template> -->
+    <div v-if="false">
+      <vui-confirm v-model="cancel.popup" title="信息确认" @ok="cancelOrder">
+        <div class="vc-padding vc-text--center">
+          <span class="vc-text--danger">是否确定取消该充值订单?</span>
+        </div>
+      </vui-confirm>
+      <div class="vv-side-header is-title vc-text--center">
+        <p>
+          <span class="vc-text--light">{{ params.sn }}</span>
+        </p>
+        <p>
+          <span style="font-size: 24px;">￥ </span>
+          <span style="font-size: 40px;">{{ params.fee | strMoney }}</span>
+        </p>
+      </div>
+      <div class="vv-side">
+        <div class="vv-side-item is-grow ">
+          <span class="vc-text--gray">
+            过期倒计时：
+          </span>
+          <span class="vc-text--danger vc-text--bold">
+            {{ params.timeLimit | strTime }}
+          </span>
+        </div>
+        <div
+          class="vv-side-item vv-text--wx"
+          @click="selectSide('wx')"
+          v-if="params.payType == 2"
+        >
+          <span class="vc-text--bold">微信</span>
+          <i class="iconfont icon-jiantou" style="font-size:16px"></i>
+        </div>
+        <div
+          class="vv-side-item vv-text--ali"
+          @click="selectSide('alipay')"
+          v-if="params.payType == 5 || params.payType == 6"
+        >
+          <span class="vc-text--bold">支付宝</span>
+          <i class="iconfont icon-jiantou" style="font-size:16px"></i>
+        </div>
+        <div class="vv-side-item vc-text--danger" @click="selectSide('cancel')">
+          <span class="vc-text--bold">取消</span>
+          <i class="iconfont icon-quxiao" style="font-size:16px"></i>
+        </div>
+        <div
+          class="vv-side-item vc-text--warning"
+          @click="selectSide('customer')"
+          v-if="false"
+        >
+          <span class="vc-text--bold">客服</span>
+          <i class="iconfont icon-customer" style="font-size:16px"></i>
+        </div>
+      </div>
+
+      <div>
+        <payCard
+          v-if="params.payType == 1 || params.payType == 5"
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+          :payType="params.payType"
+          ref="payCard"
+        ></payCard>
+        <payWx
+          v-if="params.payType == 2"
+          :qr="params.qr"
+          :backTime="params.timeLimit"
+          :sn="params.sn"
+          :fee="params.fee"
+          :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+        ></payWx>
+        <template v-if="params.payType == 3 || params.payType == 6">
+          <payAli
+            :qr="params.qr"
+            :backTime="params.timeLimit"
+            :sn="params.sn"
+            :fee="params.fee"
+            :alipayRealName="params.alipayRealName"
+            :url="params.url"
+            :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+            :payType="params.payType"
+            :token="params.token"
+            ref="payAli"
+          ></payAli>
+        </template>
+        <template v-if="params.payType == 4">
+          <payUnion
+            :qr="params.qr"
+            :backTime="params.timeLimit"
+            :sn="params.sn"
+            :fee="params.fee"
+            :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+          ></payUnion>
+        </template>
+      </div>
+      <!-- <template v-if="params.payType == 5 && isShow">
+  <payCardQuick
+  :qr="params.qr"
+  :backTime="params.timeLimit"
+  :sn="params.sn"
+  :fee="params.fee"
+  :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+  ></payCardQuick>
+  </template> -->
+      <!-- <template v-if="params.payType == 6 && isShow">
+  <payAliQuick
+  :qr="params.qr"
+  :backTime="params.timeLimit"
+  :sn="params.sn"
+  :fee="params.fee"
+  :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
+  ></payAliQuick>
+  </template> -->
+    </div>
   </div>
 </template>
-<style scoped>
-</style>
+<style scoped></style>
