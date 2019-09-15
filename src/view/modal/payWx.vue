@@ -60,108 +60,110 @@ export default {
 };
 </script>
 <template>
-  <div class="vv-page-wrap vv-bg--wx">
+  <div class="vv-page-wrap">
     <div class="vv-page-body">
-      <div class="vv-page-content is-wx">
-        <div class="vv-page-content--inner is-wx">
-          <div class="vc-text--center vc-margin--bm">
-            <template v-if="payRemark.length !== 6">
-              <div>
-                <span class="vc-text--bold vc-text--danger vc-text--lg">
-                  请确保付款金额与订单金额一致
-                </span>
-              </div>
-            </template>
-            <div>
-              <span class="vc-text--bold vc-text--danger vc-text--lg">
-                同一订单请勿重复支付
+      <div class="vv-page-content">
+        <div class="vc-text--center vc-margin--bm">
+          <p class="">
+            <i
+              class="iconfont icon-weixinzhifu vv-text--wx"
+              style="font-size:30px"
+            ></i>
+            <span class="vc-margin__sm--lt" style="font-size:30px">
+              微信
+            </span>
+          </p>
+          <p class=" ">
+            <span style="font-size: 30px;">￥</span>
+            <span style="font-size: 50px;" class="vc-text--bold">
+              {{ fee | strMoney }}
+            </span>
+          </p>
+          <template v-if="payRemark.length !== 6">
+            <div class="">
+              <span class=" vc-text--bold vc-text--danger vc-text--lg">
+                请确保付款金额一致，否则不到账
               </span>
             </div>
-            <div>
-              <span class="vc-text--bold vc-text--danger vc-text--lg">
-                超时请勿支付
-              </span>
-            </div>
-            <template v-if="payRemark.length === 4">
-              <div>
-                <span class="vc-text--bold vc-text--danger vc-text--lg">
-                  必须在转账备注中添加付款码
-                </span>
-              </div>
-              <div>
-                <span class="vc-text--bold  vc-text--xl">
-                  {{ payRemark }}
-                </span>
-              </div>
-            </template>
-          </div>
-          <div class="vc-margin--bm">
-            <div class="vp-ratio">
-              <div class="vp-ratio__outer" data-ratio="100%">
-                <div
-                  class="vp-ratio__inner vp-bg vp-br  vp-pos"
-                  ref="codeBox"
-                  v-if="qr"
-                >
-                  <qriously
-                    :value="qr"
-                    :size="payCode.size"
-                    :level="payCode.level"
-                    :background="payCode.background"
-                    :foreground="payCode.foreground"
-                    :backgroundAlpha="payCode.backgroundAlpha"
-                  />
+          </template>
+        </div>
+        <div class="vc-margin--bm">
+          <div
+            class="vp-ratio"
+            style="margin: 0 auto;width:100%;max-width: 200px"
+          >
+            <div class="vp-ratio__outer" data-ratio="100%">
+              <div
+                class="vp-ratio__inner vp-bg vp-br  vp-pos"
+                ref="codeBox"
+                v-if="qr"
+              >
+                <qriously
+                  :value="qr"
+                  :size="payCode.size"
+                  :level="payCode.level"
+                  :background="payCode.background"
+                  :foreground="payCode.foreground"
+                  :backgroundAlpha="payCode.backgroundAlpha"
+                />
 
-                  <div
-                    style=""
-                    class=" vp-bg vp-pos--inner vp-pos--center vp-br vc-padding__sm"
-                  >
-                    <div class="vc-cover vp-img__inner">
-                      <!--<img src="../images/icon-head-normal.png" alt="" class="vp-img&#45;&#45;cover">-->
-                      <i
-                        class="iconfont icon-weixinzhifu vv-text--wx"
-                        style="font-size: 0.6rem;"
-                      ></i>
-                    </div>
+                <div
+                  style=""
+                  class=" vp-bg vp-pos--inner vp-pos--center vp-br vc-padding__sm"
+                >
+                  <div class="vc-cover vp-img__inner" v-if="false">
+                    <!--<img src="../images/icon-head-normal.png" alt="" class="vp-img&#45;&#45;cover">-->
+                    <i
+                      class="iconfont icon-weixinzhifu vv-text--wx"
+                      style="font-size: 0.6rem;"
+                    ></i>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class=" vc-padding">
-          <div class="vc-flex">
-            <div class=" vc-text--center vc-flex vc-direction--column ">
-              <i
-                class="iconfont icon-jieping1 vv-text--wx vc-margin__sm--bm"
-              ></i>
-              <span class="vc-text--sm vc-text--gray"
-                >将二维码截屏并保存至本地相册
-              </span>
-            </div>
-            <div class="vc-padding__sm--ad vc-padding__lg--tp">
-              <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
-            </div>
-            <div class=" vc-text--center vc-flex vc-direction--column ">
-              <i
-                class="iconfont icon-changyonglogo30 vv-text--wx vc-margin__sm--bm"
-              ></i>
+        <div class="vc-flex vc-margin--bm">
+          <div class=" vc-text--center vc-flex vc-direction--column ">
+            <i class="iconfont icon-jieping1 vv-text--wx vc-margin__sm--bm"></i>
+            <span>将二维码截屏并保存至本地相册 </span>
+          </div>
+          <div class="vc-padding__sm--ad vc-padding__lg--tp">
+            <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
+          </div>
+          <div class=" vc-text--center vc-flex vc-direction--column ">
+            <i
+              class="iconfont icon-weixinzhifu vv-text--wx vc-margin__sm--bm"
+            ></i>
 
-              <span class="vc-text--sm vc-text--gray">
-                打开微信选择扫一扫
-              </span>
-            </div>
-            <div class="vc-padding__sm--ad vc-padding__lg--tp">
-              <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
-            </div>
-            <div class=" vc-text--center vc-flex vc-direction--column ">
-              <i
-                class="iconfont icon-saoyisao vv-text--wx vc-margin__sm--bm"
-              ></i>
-              <span class="vc-text--sm vc-text--gray"
-                >从本地相册选取截屏二维码</span
-              >
-            </div>
+            <span class="">
+              打开微信选择扫一扫
+            </span>
+          </div>
+          <div class="vc-padding__sm--ad vc-padding__lg--tp">
+            <i class="iconfont icon-jiantou vc-text--sm vv-text--wx"></i>
+          </div>
+          <div class=" vc-text--center vc-flex vc-direction--column ">
+            <i class="iconfont icon-saoyisao vv-text--wx vc-margin__sm--bm"></i>
+            <span>从本地相册选取截屏二维码</span>
+          </div>
+        </div>
+        <div class="vc-text--center  ">
+          <div class="vc-margin__sm--bm">
+            <span class=" vc-text--danger ">
+              付款30秒内即可到账，未到账请联系客服
+            </span>
+          </div>
+
+          <div class="vc-margin__sm--bm">
+            <span class=" vc-text--danger ">
+              每笔订单的二维码是唯一的，请勿重复支付
+            </span>
+          </div>
+          <div class="vc-margin__sm--bm">
+            <span class=" vc-text--danger ">
+              过期订单请勿支付
+            </span>
           </div>
         </div>
       </div>

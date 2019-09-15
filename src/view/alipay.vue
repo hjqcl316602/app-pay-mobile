@@ -14,7 +14,7 @@ function ready(callback) {
   if (window.AlipayJSBridge) {
     callback && callback();
   } else {
-     document.addEventListener("AlipayJSBridgeReady", callback, false);
+    document.addEventListener("AlipayJSBridgeReady", callback, false);
   }
 }
 export default {
@@ -217,11 +217,11 @@ export default {
         </div>
         <div class="vv-side">
           <div class="vv-side-item vc-text--theme" @click="handler('alipay')">
-            <span class="vc-text--bold">去支付</span>
+            <span class="vc-text--bold vc-margin__sm--rt">去支付</span>
             <i class="iconfont icon-zhifubao" style="font-size:16px"></i>
           </div>
           <div class="vv-side-item vc-text--danger" @click="handler('scan')">
-            <span class="vc-text--bold">扫一扫</span>
+            <span class="vc-text--bold vc-margin__sm--rt">扫一扫</span>
             <i class="iconfont icon-saoyisao" style="font-size:16px"></i>
           </div>
         </div>
@@ -230,5 +230,4 @@ export default {
   </div>
 </template>
 
-<style   scoped>
-</style>
+<style scoped></style>
