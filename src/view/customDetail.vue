@@ -6,8 +6,10 @@
  * @LastEditors: Please set LastEditors
  -->
 <script>
+import Vue from "vue";
 import { Upload, Pic, Ratio, Tag, Icon } from "../components";
 import { Checker } from "store-es";
+import Mask from "../components/mask";
 import {
   getOrderDetail,
   createSocket,
@@ -15,7 +17,7 @@ import {
   getChatHistory
 } from "../request";
 
-import { ImagePreview } from "vant";
+Vue.use(Mask);
 
 export default {
   name: "CustomDeatil",
@@ -61,6 +63,10 @@ export default {
           finished: true
         },
         number: 0
+      },
+      picture: {
+        show: false,
+        value: ""
       }
     };
   },
@@ -319,17 +325,8 @@ export default {
      * 预览图片
      */
     showPicture(currentPic) {
-      let pics = [];
-      this.chats.forEach(item => {
-        if (item["type"] === 1) {
-          pics.push(item["content"]);
-        }
-      });
-      ImagePreview({
-        images: pics,
-        startPosition: pics.indexOf(currentPic),
-        loop: false
-      });
+      this.picture.show = true;
+      this.picture.value = currentPic;
     }
   },
   beforeDestroy() {
@@ -342,6 +339,15 @@ export default {
 
 <template>
   <div class="vv-custom-deatil">
+    <vui-mask v-model="picture.show" transition-name="fade">
+      <div class="vc-padding vc-flex--center" style="width: 100%;height: 100%;">
+        <img
+          :src="picture.value"
+          alt=""
+          style="max-width: 100%;max-height: 100%"
+        />
+      </div>
+    </vui-mask>
     <div class="vv-body" ref="body">
       <div class="vv-body__content">
         <div class="vc-text--center vc-margin--bm" v-if="!chat.push.finished">
@@ -505,14 +511,22 @@ export default {
           <Upload @change="selectPic"></Upload>
         </div>
         <div class="vc-flex--fit">
-          <van-field
+          <!--<van-field-->
+          <!--v-model="custom.message"-->
+          <!--type="textarea"-->
+          <!--placeholder="请输入您申诉的内容..."-->
+          <!--rows="1"-->
+          <!--:autosize="{ maxHeight: 100, minHeight: 24 }"-->
+          <!--/>-->
+          <input
+            type="text"
+            class="vp-input"
             v-model="custom.message"
-            type="textarea"
             placeholder="请输入您申诉的内容..."
-            rows="1"
-            :autosize="{ maxHeight: 100, minHeight: 24 }"
+            @keyup.enter="sendMessage"
           />
         </div>
+
         <div class="">
           <div
             class="vc-btn vc-btn--primary vc-btn--small is-radius"
@@ -526,5 +540,4 @@ export default {
   </div>
 </template>
 
-<style   scoped>
-</style>
+<style scoped></style>

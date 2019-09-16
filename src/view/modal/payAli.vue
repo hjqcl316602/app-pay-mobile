@@ -129,7 +129,7 @@ export default {
           <template v-if="payType == 6">
             <div>
               <span class="vc-text--bold vc-text--danger vc-text--lg">
-                请勿修改转账信息
+                请勿修改转账信息，否则不到账
               </span>
             </div>
           </template>
