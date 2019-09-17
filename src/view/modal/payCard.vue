@@ -93,18 +93,31 @@ export default {
     <div class="vv-page-body">
       <div class="vv-page-content ">
         <div class="vc-text--center vc-margin--bm">
-          <div class="vc-flex vc-flex--center">
-            <vui-image
-              width="50px"
-              height="30px"
-              fill-type="height"
-              :src="require('../../images/icon-card.png')"
-              alignType="center"
-            ></vui-image>
-            <span class="vc-margin__sm--lt" style="font-size:30px">
-              银联
-            </span>
-          </div>
+          <template v-if="payType == 1">
+            <div class="vc-flex vc-flex--center">
+              <vui-image
+                width="50px"
+                height="30px"
+                fill-type="height"
+                :src="require('../../images/icon-card.png')"
+                alignType="center"
+              ></vui-image>
+              <span class="vc-margin__sm--lt" style="font-size:30px">
+                银联
+              </span>
+            </div>
+          </template>
+          <template v-if="payType == 5">
+            <div class="vc-flex vc-flex--center">
+              <i
+                class="iconfont icon-zhifubaozhifu vv-text--ali"
+                style="font-size:30px"
+              ></i>
+              <span class="vc-margin__sm--lt" style="font-size:30px">
+                支付宝转卡
+              </span>
+            </div>
+          </template>
 
           <p class=" ">
             <span style="font-size: 30px;">￥</span>
@@ -182,13 +195,20 @@ export default {
             </div>
           </div>
         </div>
+        <template v-if="payType == 5">
+          <div class="vc-text--center vc-margin--bm">
+            <span>单击下方按钮【支付宝】进入支付宝APP支付即可</span>
+          </div>
+        </template>
 
         <div class="vc-text--center  ">
-          <div class="vc-margin__sm--bm">
-            <span class=" vc-text--danger ">
-              轻触卡号、户主、开户行均可复制
-            </span>
-          </div>
+          <template v-if="payType == 1">
+            <div class="vc-margin__sm--bm">
+              <span class=" vc-text--danger ">
+                轻触卡号、户主、开户行均可复制
+              </span>
+            </div>
+          </template>
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
               付款30秒内即可到账，未到账请联系客服

@@ -123,7 +123,7 @@ export default {
       </div>
     </div>
     <div class="vc-fluid--h-min vp-bg " style="padding: 20px 20px ">
-      <div class="vp-ratio ">
+      <div class="vp-ratio " style="max-width: 500px;margin: 0 auto">
         <div class="vp-ratio__outer" data-ratio="75%">
           <div class="vp-ratio__inner vc-flex--center">
             <div v-if="params.status === 0">
