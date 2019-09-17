@@ -197,7 +197,9 @@ export default {
         </div>
         <template v-if="payType == 5">
           <div class="vc-text--center vc-margin--bm">
-            <span>单击下方按钮【支付宝】进入支付宝APP支付即可</span>
+            <span class="vc-text--lg"
+              >单击下方按钮【支付宝】进入支付宝APP支付即可</span
+            >
           </div>
         </template>
 
