@@ -74,6 +74,7 @@ export default {
   mounted() {
     this.init();
     //this.hanlderHeaderVisibility();
+    this.getClipboardImage();
   },
   methods: {
     /**
@@ -94,6 +95,21 @@ export default {
       let list = await this.getChatHistory();
 
       this.createSocket();
+    },
+
+    /**
+     * 时间：2019/9/18 ,
+     * 描述：获取粘贴板的图片文件
+     */
+
+    getClipboardImage() {
+      this.$refs["editable"].onpaste = event => {
+        let value = event.clipboardData.items[0];
+        if (value.kind === "file" && value.type.indexOf("image/") !== -1) {
+          this.selectPic(value.getAsFile(), "clipboard");
+          return false;
+        }
+      };
     },
 
     /**
@@ -311,8 +327,13 @@ export default {
     /**
      * 选择图片并上传
      */
-    async selectPic(value) {
-      let res = await uploadImage(value, true, "正在发送图片...");
+    async selectPic(value, type = "local") {
+      let upload = value;
+      if (type === "clipboard") {
+        upload = new FormData();
+        upload.append("file", value);
+      }
+      let res = await uploadImage(upload, true, "正在发送图片...");
       this.sendSocketMessage({ content: res["url"], type: 1 });
     },
     /**
@@ -522,6 +543,7 @@ export default {
             type="text"
             class="vp-input"
             v-model="custom.message"
+            ref="editable"
             placeholder="请输入您申诉的内容..."
             @keyup.enter="sendMessage"
           />
