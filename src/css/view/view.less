@@ -98,7 +98,7 @@
   background-color: #fff;
 }
 .vv-page.is-cover-hor {
-  height: 100vh;
+  min-height: 100vh;
 }
 .vv-page.is-side-header {
   padding-top: 24px;
@@ -109,15 +109,11 @@
 
 .vv-page-wrap {
   height: 100%;
-  overflow: auto;
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
 }
 .vv-page-body {
-  min-height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .vv-page-content {
   width: 100%;
@@ -224,4 +220,14 @@
 .vv-side-header.is-title {
   line-height: 24px;
   text-align: center;
+}
+/*全局关闭（取消）按钮*/
+.vv-close {
+  position: fixed;
+  z-index: 99;
+}
+.vv-close.is-close--top-right {
+  top: 0;
+  right: 0;
+  padding: 10px;
 }

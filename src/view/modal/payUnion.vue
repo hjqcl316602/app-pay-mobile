@@ -66,21 +66,24 @@ export default {
         <div class="vc-text--center vc-margin--bm">
           <div class="vc-flex vc-flex--center">
             <vui-image
-              width="30px"
-              height="30px"
+              width="24px"
+              height="24px"
               fill-type="height"
               :src="require('../../images/icon-union.png')"
               alignType="center"
             ></vui-image>
-            <span class="vc-margin__sm--lt" style="font-size:30px">
+            <span class="vc-margin__sm--lt" style="font-size:24px">
               云闪付
             </span>
           </div>
           <p class=" ">
-            <span style="font-size: 30px;">￥</span>
-            <span style="font-size: 50px;" class="vc-text--bold">
+            <span style="font-size: 24px;">￥</span>
+            <span style="font-size: 30px;" class="vc-text--bold">
               {{ fee | strMoney }}
             </span>
+          </p>
+          <p>
+            <span class="vc-text--gray">{{ sn }}</span>
           </p>
           <template v-if="payRemark.length !== 6">
             <div class="">
@@ -165,6 +168,12 @@ export default {
           </div>
         </div>
 
+        <div class=" vc-margin--bm vc-text--center">
+          <span class="vc-text--bold vc-text--danger vc-text--lg">
+            有效时间：{{ backTime | strTime }}
+          </span>
+        </div>
+
         <div class="vc-text--center  ">
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
@@ -179,7 +188,7 @@ export default {
           </div>
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
-              过期订单请勿支付
+              请在有效时间内支付，超时请勿支付
             </span>
           </div>
         </div>

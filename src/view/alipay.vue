@@ -150,143 +150,100 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="vv-page is-cover-hor vc-padding__lg">
+    <div class="vc-margin--bm vc-text--center">
+      <img src="../images/logo-ali.jpg" alt="" style="height:44px" />
+    </div>
     <template v-if="params.payType == 5">
-      <div class="vv-page">
-        <div
-          style="position:fixed;top:0;left:0;right:0;"
-          class="vc-flex--center vc-padding--ud"
-        >
-          <img src="../images/logo-ali.jpg" alt="" style="height:44px" />
+      <div class="vc-margin--bm vc-text--center">
+        <div class="vc-margin--bm ">
+          <span class="vc-text--danger vc-text--bold">温馨提示</span>
         </div>
+        <div class="vc-margin--bm">
+          <p style="text-indent:20px;margin-bottom:8px" class="vc-text--danger">
+            单击下方按钮【去支付】，如果能正常跳转至转账页面，继续转账即可
+          </p>
+          <p style="text-indent:20px;margin-bottom:8px" class="vc-text--danger">
+            若跳转后出现系统原因导致不能正常转账，您需要返回至该页面后开启手机【飞行/离线模式】，再单击下方按钮【去支付】，跳转至转账页面后再关闭【飞行/离线模式】，等待网络恢复正常后即可继续转账
+          </p>
+        </div>
+      </div>
+      <div class="vc-margin--bm vc-text--center">
+        <div class="vc-margin--bm ">
+          <span class="vc-text--danger vc-text--bold">注意事项</span>
+        </div>
+        <div>
+          <p style="text-indent:20px" class=" ">
+            请勿修改转账信息
+          </p>
+        </div>
+      </div>
+      <div class="vc-margin--bm">
+        <div class="vc-margin--bm vc-text--center">
+          <span class="vc-text--danger vc-text--bold">示例如下</span>
+        </div>
+        <div class="vc-text--center">
+          <img src="../images/img-unalive.png" alt="" style="max-width:200px" />
+        </div>
+      </div>
+
+      <div>
         <div
-          class="vc-fluid--h-min vc-flex--center vp-bg"
-          style="padding: 20px 20px 80px"
+          class="vp-btn vp-btn__submit is-btn--ali"
+          @click="handler('toCard', 'alipay')"
         >
-          <div class="vc-flex vc-direction--column vc-items--center">
-            <div class="vc-margin--bm">
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">温馨提示</span>
-              </div>
-              <div class="vc-margin--bm">
-                <p
-                  style="text-indent:20px;margin-bottom:8px"
-                  class="vc-text--danger"
-                >
-                  单击下方按钮【去支付】，如果能正常跳转至转账页面，继续转账即可
-                </p>
-                <p
-                  style="text-indent:20px;margin-bottom:8px"
-                  class="vc-text--danger"
-                >
-                  若跳转后出现系统原因导致不能正常转账，您需要返回至该页面后开启手机【飞行/离线模式】，再单击下方按钮【去支付】，跳转至转账页面后再关闭【飞行/离线模式】，等待网络恢复正常后即可继续转账
-                </p>
-              </div>
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">注意事项</span>
-              </div>
-              <div>
-                <p style="text-indent:20px" class="vc-text--danger">
-                  请勿修改转账信息
-                </p>
-              </div>
-            </div>
-            <div>
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">示例如下</span>
-              </div>
-              <div class="vc-text--center">
-                <img
-                  src="../images/img-unalive.png"
-                  alt=""
-                  style="max-width:200px"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="vv-side">
-            <div
-              class="vv-side-item vc-text--theme"
-              @click="handler('toCard', 'alipay')"
-            >
-              <span class="vc-text--bold vc-margin__sm--rt">去支付</span>
-              <i class="iconfont icon-zhifubao" style="font-size:16px"></i>
-            </div>
-          </div>
+          去支付
         </div>
       </div>
     </template>
     <template v-if="params.payType == 6">
-      <div class="vv-page">
-        <div
-          style="position:fixed;top:0;left:0;right:0;"
-          class="vc-flex--center vc-padding--ud"
-        >
-          <img src="../images/logo-ali.jpg" alt="" style="height:44px" />
+      <div class="vc-margin--bm vc-text--center">
+        <div class="vc-margin--bm  ">
+          <span class="vc-text--danger vc-text--bold">温馨提示</span>
         </div>
-        <div
-          class="vc-fluid--h-min vc-flex--center vp-bg"
-          style="padding: 20px 20px 80px"
-        >
-          <div class="vc-flex vc-direction--column vc-items--center">
-            <div class="vc-margin--bm">
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">温馨提示</span>
-              </div>
-              <div class="vc-margin--bm">
-                <p
-                  style="text-indent:20px;margin-bottom:8px"
-                  class="vc-text--danger"
-                >
-                  单击下方按钮【去支付】，如果能正常跳转至转账页面，继续转账即可
-                </p>
-                <p
-                  style="text-indent:20px;margin-bottom:8px"
-                  class="vc-text--danger"
-                >
-                  若跳转后出现系统原因导致不能正常转账，您需要返回至该页面单击下方按钮【扫一扫】，并
-                  选择您身边随处可见的二维码或条形码，对准其进行扫码，扫码之后若能正常跳转至转账页面，继续转账即可
-                </p>
-              </div>
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">注意事项</span>
-              </div>
-              <div>
-                <p style="text-indent:20px" class="vc-text--danger">
-                  请勿修改转账信息
-                </p>
-                <p style="text-indent:20px" class="vc-text--danger">
-                  使用扫一扫时，不能从相册中选择条形码或二维码，可选如烟盒，零食，酒水...
-                </p>
-              </div>
-            </div>
-            <div>
-              <div class="vc-margin--bm vc-text--center">
-                <span class="vc-text--danger vc-text--bold">示例如下</span>
-              </div>
-              <div class="vc-text--center">
-                <img src="../images/icon-code.jpg" alt="" style="height:44px" />
-                <img src="../images/icon-qr.jpg" alt="" style="height:44px" />
-              </div>
-            </div>
-          </div>
-          <div class="vv-side">
-            <div
-              class="vv-side-item vc-text--theme"
-              @click="handler('toAccount', 'alipay')"
-            >
-              <span class="vc-text--bold vc-margin__sm--rt">去支付</span>
-              <i class="iconfont icon-zhifubao" style="font-size:16px"></i>
-            </div>
-            <div
-              class="vv-side-item vc-text--danger"
-              @click="handler('toAccount', 'scan')"
-            >
-              <span class="vc-text--bold vc-margin__sm--rt">扫一扫</span>
-              <i class="iconfont icon-saoyisao" style="font-size:16px"></i>
-            </div>
-          </div>
+        <div class="vc-margin--bm">
+          <p style="text-indent:20px;margin-bottom:8px" class="vc-text--danger">
+            单击下方按钮【去支付】，如果能正常跳转至转账页面，继续转账即可
+          </p>
+          <p style="text-indent:20px;margin-bottom:8px" class="vc-text--danger">
+            若跳转后出现系统原因导致不能正常转账，您需要返回至该页面单击下方按钮【扫一扫】，并
+            选择您身边随处可见的二维码或条形码，对准其进行扫码，扫码之后若能正常跳转至转账页面，继续转账即可
+          </p>
         </div>
+      </div>
+      <div class="vc-margin--bm vc-text--center">
+        <div class="vc-margin--bm ">
+          <span class="vc-text--danger vc-text--bold">注意事项</span>
+        </div>
+        <div>
+          <p style="text-indent:20px" class="vc-text--danger">
+            请勿修改转账信息
+          </p>
+          <p style="text-indent:20px" class="vc-text--danger">
+            使用扫一扫时，不能从相册中选择条形码或二维码，可选如烟盒，零食，酒水...
+          </p>
+        </div>
+      </div>
+      <div class="vc-margin--bm vc-text--center">
+        <div class=" ">
+          <span class="vc-text--danger vc-text--bold">示例如下</span>
+        </div>
+        <div class="vc-text--center">
+          <img src="../images/icon-code.jpg" alt="" style="height:44px" />
+          <img src="../images/icon-qr.jpg" alt="" style="height:44px" />
+        </div>
+      </div>
+      <div
+        class="vp-btn vp-btn__submit is-btn--ali"
+        @click="handler('toAccount', 'alipay')"
+      >
+        去支付
+      </div>
+      <div
+        class="vp-btn vp-btn__submit is-btn--hollow"
+        @click="handler('toAccount', 'scan')"
+      >
+        扫一扫
       </div>
     </template>
   </div>

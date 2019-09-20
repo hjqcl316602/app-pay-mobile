@@ -13,21 +13,17 @@ import { Queryer, Urler } from "store-es";
 Vue.use(VueClipboards);
 
 const APPID_TO_ALIPAY = "20000067";
-
 /**
  * 跳转到支付宝内部，指定的路径和参数的传递
  */
-function getAlipayUrl(path, params) {
+function getAlipayUrl(path) {
   let query = new Queryer();
   let urler = new Urler();
   let href = window.location.href;
   let index = href.indexOf("#");
-  let url = urler.encodeURIComponent(
-    href.substring(0, index + 1) + path + query.stringify(params)
-  );
+  let url = urler.encodeURIComponent(href.substring(0, index + 1) + path);
   return `alipays://platformapi/startapp?appId=${APPID_TO_ALIPAY}&url=${url}`;
 }
-
 export default {
   name: "PagePayCard",
   data() {
@@ -76,6 +72,16 @@ export default {
     },
     handleError(e) {
       this.$message.success("复制失败！");
+    },
+    openAli() {
+      let test = false;
+      if (test) {
+        this.$router.push(`/alipay/${this.token}/${this.payType}`);
+      } else {
+        window.location.href = getAlipayUrl(
+          `/alipay/${this.token}/${this.payType}`
+        );
+      }
     }
   },
   props: {
@@ -84,7 +90,8 @@ export default {
     sn: { type: String },
     fee: { type: [String, Number] },
     payRemark: { type: String },
-    payType: { type: [String, Number] }
+    payType: { type: [String, Number] },
+    token: { type: [String] }
   }
 };
 </script>
@@ -96,13 +103,13 @@ export default {
           <template v-if="payType == 1">
             <div class="vc-flex vc-flex--center">
               <vui-image
-                width="50px"
-                height="30px"
+                width="40px"
+                height="24px"
                 fill-type="height"
                 :src="require('../../images/icon-card.png')"
                 alignType="center"
               ></vui-image>
-              <span class="vc-margin__sm--lt" style="font-size:30px">
+              <span class="vc-margin__sm--lt" style="font-size:24px">
                 银联
               </span>
             </div>
@@ -111,19 +118,22 @@ export default {
             <div class="vc-flex vc-flex--center">
               <i
                 class="iconfont icon-zhifubaozhifu vv-text--ali"
-                style="font-size:30px"
+                style="font-size:24px"
               ></i>
-              <span class="vc-margin__sm--lt" style="font-size:30px">
+              <span class="vc-margin__sm--lt" style="font-size:24px">
                 支付宝转卡
               </span>
             </div>
           </template>
 
           <p class=" ">
-            <span style="font-size: 30px;">￥</span>
-            <span style="font-size: 50px;" class="vc-text--bold">
+            <span style="font-size: 24px;">￥</span>
+            <span style="font-size: 30px;" class="vc-text--bold">
               {{ fee | strMoney }}
             </span>
+          </p>
+          <p>
+            <span class="vc-text--gray">{{ sn }}</span>
           </p>
           <template v-if="payType == 1">
             <div class=" ">
@@ -195,22 +205,27 @@ export default {
             </div>
           </div>
         </div>
-        <template v-if="payType == 5">
+        <template v-if="false">
           <div class="vc-text--center vc-margin--bm">
             <span class="vc-text--lg"
               >单击下方按钮【支付宝】进入支付宝APP支付即可</span
             >
           </div>
         </template>
+        <template v-if="payType == 1">
+          <div class="vc-text--center vc-margin--bm">
+            <span class="vc-text--lg">
+              轻触卡号、户主、开户行均可复制
+            </span>
+          </div>
+        </template>
+        <div class="vc-text--center vc-margin--bm">
+          <span class="vc-text--bold vc-text--danger vc-text--lg">
+            有效时间：{{ backTime | strTime }}
+          </span>
+        </div>
 
-        <div class="vc-text--center  ">
-          <template v-if="payType == 1">
-            <div class="vc-margin__sm--bm">
-              <span class=" vc-text--danger ">
-                轻触卡号、户主、开户行均可复制
-              </span>
-            </div>
-          </template>
+        <div class="vc-text--center vc-margin--bm ">
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
               付款30秒内即可到账，未到账请联系客服
@@ -224,10 +239,22 @@ export default {
           </div>
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
-              过期订单请勿支付
+              请在有效时间内支付，超时请勿支付
             </span>
           </div>
         </div>
+
+        <template v-if="payType == 5">
+          <div>
+            <div
+              class="vp-btn vp-btn__submit is-btn--ali"
+              style=""
+              @click="openAli"
+            >
+              打开支付宝
+            </div>
+          </div>
+        </template>
       </div>
     </div>
   </div>

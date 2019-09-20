@@ -211,14 +211,14 @@ export default {
 };
 </script>
 <template>
-  <div class="vv-page is-cover-hor is-side-footer  ">
+  <div class="vv-page is-cover-hor">
     <vui-confirm v-model="cancel.popup" title="信息确认" @ok="cancelOrder">
       <div class="vc-padding vc-text--center">
         <span class="vc-text--danger">是否确定取消该充值订单?</span>
       </div>
     </vui-confirm>
 
-    <div class="vc-flex--center vv-mask" v-if="params.timeLimit == 0">
+    <div class="vc-flex--center vv-mask" v-if="false">
       <div>
         <div class="vc-text--center vc-text--white" style="font-size: 40px">
           已过期
@@ -226,7 +226,10 @@ export default {
       </div>
     </div>
 
-    <template>
+    <template v-if="isShow && params.timeLimit != 0">
+      <div class="vv-close is-close--top-right" @click="selectSide('cancel')">
+        <i class="iconfont icon-delete vc-text--xl-x vc-text--danger"></i>
+      </div>
       <template v-if="params.payType == 1 || params.payType == 5">
         <payCard
           :qr="params.qr"
@@ -235,6 +238,7 @@ export default {
           :fee="params.fee"
           :payRemark="params.needRemark === 'true' ? params.payRemark : ''"
           :payType="params.payType"
+          :token="params.token"
           ref="payCard"
         ></payCard>
       </template>
@@ -271,51 +275,33 @@ export default {
         ></payUnion>
       </template>
     </template>
-    <div class="vv-side">
-      <div class="vv-side-item is-grow ">
-        <div>
-          <div class="vc-text--left">
-            <span class="vc-text--gray">
-              倒计时：
-            </span>
-            <span class="vc-text--danger vc-text--bold">
-              {{ params.timeLimit | strTime }}
-            </span>
-          </div>
-          <div class="vc-text--left">
-            <span class="vc-text--gray vc-text--mi">{{ params.sn }}</span>
+    <template v-if="isShow && params.timeLimit == 0">
+      <div class="vv-page-wrap">
+        <div class="vp-ratio">
+          <div class="vp-ratio__outer" data-ratio="75%">
+            <div class="vp-ratio__inner vc-flex--center">
+              <div>
+                <div>
+                  <img
+                    src="../images/icon-pay-error.png"
+                    alt=""
+                    style="width: 100px;"
+                  />
+                </div>
+                <div class="vc-margin--tp">
+                  <span
+                    class="vc-text--bold vc-text--center"
+                    style="color:#d81e06;font-size: 18px;"
+                  >
+                    订单已超时
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div
-        class="vv-side-item vv-text--wx"
-        @click="selectSide('wx')"
-        v-if="params.payType == 2"
-      >
-        <span class="vc-text--bold vc-margin__sm--rt">微信</span>
-        <i class="iconfont icon-jiantou" style="font-size:16px"></i>
-      </div>
-      <div
-        class="vv-side-item vv-text--ali"
-        @click="selectSide('alipay')"
-        v-if="params.payType == 5 || params.payType == 6"
-      >
-        <span class="vc-text--bold vc-margin__sm--rt">支付宝</span>
-        <i class="iconfont icon-jiantou" style="font-size:16px"></i>
-      </div>
-      <div class="vv-side-item vc-text--danger" @click="selectSide('cancel')">
-        <span class="vc-text--bold vc-margin__sm--rt">取消</span>
-        <i class="iconfont icon-quxiao" style="font-size:16px"></i>
-      </div>
-      <div
-        class="vv-side-item vc-text--warning"
-        @click="selectSide('customer')"
-        v-if="false"
-      >
-        <span class="vc-text--bold">客服</span>
-        <i class="iconfont icon-customer" style="font-size:16px"></i>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 <style scoped></style>

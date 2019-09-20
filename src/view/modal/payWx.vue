@@ -42,6 +42,9 @@ export default {
     },
     handleError(e) {
       this.$message.success("复制失败！");
+    },
+    openWx() {
+      window.location.href = "weixin://";
     }
   },
 
@@ -67,17 +70,20 @@ export default {
           <p class="">
             <i
               class="iconfont icon-weixinzhifu vv-text--wx"
-              style="font-size:30px"
+              style="font-size:24px"
             ></i>
-            <span class="vc-margin__sm--lt" style="font-size:30px">
+            <span class="vc-margin__sm--lt" style="font-size:24px">
               微信
             </span>
           </p>
           <p class=" ">
-            <span style="font-size: 30px;">￥</span>
-            <span style="font-size: 50px;" class="vc-text--bold">
+            <span style="font-size: 24px;">￥</span>
+            <span style="font-size: 30px;" class="vc-text--bold">
               {{ fee | strMoney }}
             </span>
+          </p>
+          <p>
+            <span class="vc-text--gray">{{ sn }}</span>
           </p>
           <template v-if="payRemark.length !== 6">
             <div class="">
@@ -148,7 +154,12 @@ export default {
             <span>从本地相册选取截屏二维码</span>
           </div>
         </div>
-        <div class="vc-text--center  ">
+        <div class="vc-text--center vc-margin--bm">
+          <span class="vc-text--bold vc-text--danger vc-text--lg">
+            有效时间：{{ backTime | strTime }}
+          </span>
+        </div>
+        <div class="vc-text--center vc-margin--bm ">
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
               付款30秒内即可到账，未到账请联系客服
@@ -162,8 +173,17 @@ export default {
           </div>
           <div class="vc-margin__sm--bm">
             <span class=" vc-text--danger ">
-              过期订单请勿支付
+              请在有效时间内支付，超时请勿支付
             </span>
+          </div>
+        </div>
+        <div>
+          <div
+            class="vp-btn vp-btn__submit is-btn--wx"
+            style=""
+            @click="openWx"
+          >
+            打开微信
           </div>
         </div>
       </div>
